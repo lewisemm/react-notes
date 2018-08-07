@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import './signin.css';
+
 class SignUp extends Component {
 
   constructor(props) {
@@ -57,6 +59,12 @@ class SignUp extends Component {
           <div className="row justify-content-center">
             <div className="form-group col-4">
               <button type="submit" className="btn btn-primary" onClick={this.createUser}>Create Account</button>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="form-group col-4">
+              <span>Have an account? </span>
+              <button type="button" className="btn btn-outline-primary">Log In</button>
             </div>
           </div>
         </div>
