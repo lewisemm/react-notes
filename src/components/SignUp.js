@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import './signin.css';
+import { Input, Button } from './inputs/inputs';
 
 class SignUp extends Component {
 
@@ -31,44 +31,52 @@ class SignUp extends Component {
   render() {
 
     return (
-      <form>
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="form-group col-4">
-              <label htmlFor="username">Username</label>
-              <input type="text" className="form-control" id="username" aria-describedby="usernameHelp" placeholder="Username" />
-              <small id="usernameHelp" className="form-text text-muted">Type in a username.</small>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="form-group col-4">
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" className="form-control" id="password" placeholder="Password" />
+
+      <div className="container h-100">
+        <div className="row h-100 align-items-center justify-content-center">
+          <form className="w-100">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <Input id="username" label="Username" type="text"/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <Input id="password" label="Password" type="password"/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <Input id="password2" label="Confirm Password" type="password"/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <Button label="Create Account" onClick={this.createUser} classes="btn btn-primary w-100" type="submit"/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <hr/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <div className="container">
+                    <div className="row justify-content-center">
+                      <p>Have an account? </p>
+                    </div>
+                    <div className="row justify-content-center">
+                      <Button label="Log In" onClick="" classes="btn btn-outline-primary w-100" type="button"/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="form-group col-4">
-              <div className="form-group">
-                <label htmlFor="password2">Confirm Password</label>
-                <input type="password" className="form-control" id="password2" placeholder="Confirm Password" />
-              </div>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="form-group col-4">
-              <button type="submit" className="btn btn-primary" onClick={this.createUser}>Create Account</button>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="form-group col-4">
-              <span>Have an account? </span>
-              <button type="button" className="btn btn-outline-primary">Log In</button>
-            </div>
-          </div>
+          </form>
         </div>
-      </form>
+      </div>
     );
   }
 
