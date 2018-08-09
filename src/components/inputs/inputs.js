@@ -7,14 +7,26 @@ export function Input(props) {
   return (
     <div>
     <label htmlFor={props.id}>{props.label}</label>
-    <input type={props.type} className="form-control" id={props.id} aria-describedby={describedBy} placeholder={props.label} />
+    <input
+      type={props.type}
+      className="form-control"
+      id={props.id}
+      aria-describedby={describedBy}
+      placeholder={props.label}
+      value={props.value}
+      onChange={props.onChange}
+    />
     </div>
   );
 }
 
 export function Button(props) {
   return (
-    <button type={props.type} className={props.classes} onClick={props.onClick}>{ props.label }</button>
+    <button
+      type={props.type}
+      className={props.classes}
+      onClick={props.onClick}>{ props.label }
+    </button>
   );
 
 }
