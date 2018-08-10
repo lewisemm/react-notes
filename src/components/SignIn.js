@@ -53,7 +53,7 @@ class SignIn extends Component {
 
       <div className="container h-100">
         <div className="row h-100 align-items-center justify-content-center">
-          <form className="w-100" onSubmit={this.signInUser}>
+          <form className="w-100">
             <div className="container">
               <div className="row justify-content-center">
                 <div className="form-group col-4">

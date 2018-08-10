@@ -30,3 +30,28 @@
 html, body, #root {
   height: 100%;
 }
+
+#profile-photo {
+  max-width: 50%;
+  max-height: 100%;
+  height: 29%;
+  width: 23%;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%
+}
+
+.profile-photo-div {
+  display: flex;
+  justify-content: center;
+}
+
+.f9-colour {
+  background: #f9f9f9;
+}
+
+div.card-body > form {
+  margin-left: auto;
+  margin-right: auto;
+}
