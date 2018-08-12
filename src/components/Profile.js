@@ -10,8 +10,83 @@ class Profile extends Component {
 
     this.state = {
       username: '',
-      password: '',
+      newPassword: '',
+      confirmNewPassword: ''
     }
+
+    this.updatePassword = this.updatePassword.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+  }
+
+  handlePasswordChange(event) {
+    this.setState({newPassword: event.target.value});
+  }
+  
+  handleConfirmPasswordChange(event) {
+    this.setState({confirmNewPassword: event.target.value});
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+
+    
+    if (token && token.length > 0) {
+
+      axios({
+        method: 'get',
+        url: "http://localhost:8000/api/me/",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${token}`
+        },
+        data: {
+          'token': token
+        }
+      })
+      .then(res => {
+        this.setState({ 'username': res.data.username});
+        localStorage.setItem("user_id", res.data.id);
+      })
+      .catch(error => {
+        console.log("redirect to login using react router");
+        console.log(error);
+      });
+    } else {
+      console.log("No token hence the redirect to login");
+    }
+  }
+
+  updatePassword(event) {
+    event.preventDefault();
+
+    const token = localStorage.getItem('token');
+    const user_id = localStorage.getItem('user_id');
+    const { newPassword, confirmNewPassword } = this.state;
+    const url = "http://localhost:8000/api/users";
+    
+
+    if (newPassword === confirmNewPassword) {
+      axios({
+        method: 'put',
+        data: {
+          'username': this.state.username,
+          'password': newPassword
+        },
+        headers: {
+          'Authorization': `JWT ${token}`
+        },
+        url: `${url}/${user_id}/`
+      })
+      .then(res => {
+        console.log("password updated");
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    }
+
+
   }
 
   render() {
@@ -21,20 +96,18 @@ class Profile extends Component {
       <div className="container h-100">
         <div className="row h-100 align-items-center justify-content-center">
           <div className="col-6 h-75">
-            <div class="card h-100">
-              <img id="profile-photo" class="card-img-top" src={photo} alt="Profile Photo"/>
-              <div class="card-body">
-                <p class="card-title text-center">Username</p>
-                <form class="w-75">
+            <div className="card h-100">
+              <img id="profile-photo" className="card-img-top" src={photo} alt="Profile Photo"/>
+              <div className="card-body">
+                <p className="card-title text-center">{this.state.username}</p>
+                <form className="w-75">
                   <div className="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" placeholder="Password" />
+                    <Input id="password" label="Password" type="password" value={this.state.newPassword} onChange={this.handlePasswordChange}/>
                   </div>
                   <div className="form-group">
-                    <label for="password2">Confirm Password</label>
-                    <input type="password" className="form-control" id="password2" placeholder="Confirm Password" />
+                    <Input id="password2" label="Confirm Password" type="password" value={this.state.confirmNewPassword} onChange={this.handleConfirmPasswordChange}/>
                   </div>
-                  <button type="submit" className="btn btn-primary w-100">Update Password</button>
+                  <Button type="submit" classes="btn btn-primary w-100" label="Update Password" onClick={this.updatePassword}/>
                 </form>
               </div>
             </div>
