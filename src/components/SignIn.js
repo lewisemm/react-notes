@@ -10,8 +10,8 @@ class SignIn extends Component {
     super(props);
 
     this.state = {
-      username: 'breezy',
-      password: 'breezydjango',
+      username: '',
+      password: '',
       errorMsg: '',
       token: null
     }
@@ -53,7 +53,7 @@ class SignIn extends Component {
 
       <div className="container h-100">
         <div className="row h-100 align-items-center justify-content-center">
-          <form className="w-100" onSubmit={this.signInUser}>
+          <form className="w-100">
             <div className="container">
               <div className="row justify-content-center">
                 <div className="form-group col-4">
@@ -67,7 +67,7 @@ class SignIn extends Component {
               </div>
               <div className="row justify-content-center">
                 <div className="form-group col-4">
-                  <Button label="Sign In" classes="btn btn-primary w-100" type="submit"/>
+                  <Button label="Sign In" classes="btn btn-primary w-100" onClick={this.signInUser} type="submit"/>
                 </div>
               </div>
               <div className="row justify-content-center">
@@ -87,7 +87,7 @@ class SignIn extends Component {
                       <p>Don't have an account? </p>
                     </div>
                     <div className="row justify-content-center">
-                      <Button label="Change onClick handler here too" onClick={this.signInUser} classes="btn btn-outline-primary w-100" type="button"/>
+                      <Button label="Change onClick handler here too" classes="btn btn-outline-primary w-100" type="button"/>
                     </div>
                   </div>
                 </div>
