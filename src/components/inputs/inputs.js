@@ -45,3 +45,37 @@ export function TextArea(props) {
     </div>
   );
 }
+
+export function Note(props) {
+  const titleChars = props.title.length;
+  const noteChars = props.title.length;
+
+  let title = '', note = '';
+
+  if (titleChars >0 && titleChars < 44) {
+    title = props.title;
+  } else {
+    title = `${props.title.slice(0, 40)} ...`;
+  }
+
+  if (noteChars >0 && noteChars < 44) {
+    note = props.note;
+  } else {
+    note = `${props.note.slice(0, 40)} ...`;
+  }
+  
+  return (
+    <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
+      <div className="card">
+        <div class="card-header">
+          { title }
+        </div>
+        <div className="card-body">
+          <p className="card-text">{ note }</p>
+          <a href="#" className="card-link">Details</a>
+          <a href="#" className="card-link">Delete Note</a>
+        </div>
+      </div>
+    </div>
+  );
+}

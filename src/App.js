@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import Notes from './components/Notes';
+import Dashboard from './components/Dashboard';
 
 import logo from './logo.svg';
 import './App.css';
@@ -19,6 +20,7 @@ class App extends Component {
         <Route exact path="/login" component={SignIn}/>
         <Route exact path="/profile" component={Profile}/>
         <Route exact path="/notes" component={Notes}/>
+        <Route exact path="/dashboard" component={Dashboard}/>
       </Switch>
     );
   }

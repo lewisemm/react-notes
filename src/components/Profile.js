@@ -99,7 +99,7 @@ class Profile extends Component {
             <div className="card h-100">
               <img id="profile-photo" className="card-img-top" src={photo} alt="Profile Photo"/>
               <div className="card-body">
-                <p className="card-title text-center">{this.state.username}</p>
+                <h6 className="card-title text-center">{this.state.username}</h6>
                 <form className="w-75">
                   <div className="form-group">
                     <Input id="password" label="Password" type="password" value={this.state.newPassword} onChange={this.handlePasswordChange}/>
