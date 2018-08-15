@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
@@ -11,7 +12,8 @@ class Profile extends Component {
     this.state = {
       username: '',
       newPassword: '',
-      confirmNewPassword: ''
+      confirmNewPassword: '',
+      isAuth: false
     }
 
     this.updatePassword = this.updatePassword.bind(this);
@@ -28,33 +30,33 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
-
+    const token = localStorage.getItem('token') || "abcd";
     
-    if (token && token.length > 0) {
-
-      axios({
-        method: 'get',
-        url: "http://localhost:8000/api/me/",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `JWT ${token}`
-        },
-        data: {
-          'token': token
-        }
-      })
-      .then(res => {
-        this.setState({ 'username': res.data.username});
-        localStorage.setItem("user_id", res.data.id);
-      })
-      .catch(error => {
-        console.log("redirect to login using react router");
-        console.log(error);
+    
+    axios({
+      method: 'get',
+      url: "http://localhost:8000/api/me/",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `JWT ${token}`
+      },
+      data: {
+        'token': token
+      }
+    })
+    .then(res => {
+      this.setState({
+        username: res.data.username,
+        isAuth: true
       });
-    } else {
-      console.log("No token hence the redirect to login");
-    }
+
+      localStorage.setItem("user_id", res.data.id);
+    })
+    .catch(error => {
+      this.setState({ isAuth: false });
+
+      return <Route render={() => <Redirect to="/login" />}/>;
+    });
   }
 
   updatePassword(event) {
@@ -90,31 +92,41 @@ class Profile extends Component {
   }
 
   render() {
-    const photo = "https://res.cloudinary.com/dh6joezbz/image/upload/v1533886803/react-notes/kitten.jpg";
+
+    // if (this.state.isAuth === true) {
+
+      const photo = "https://res.cloudinary.com/dh6joezbz/image/upload/v1533886803/react-notes/kitten.jpg";
      
-    return (
-      <div className="container h-100">
-        <div className="row h-100 align-items-center justify-content-center">
-          <div className="col-6 h-75">
-            <div className="card h-100">
-              <img id="profile-photo" className="card-img-top" src={photo} alt="Profile Photo"/>
-              <div className="card-body">
-                <h6 className="card-title text-center">{this.state.username}</h6>
-                <form className="w-75">
-                  <div className="form-group">
-                    <Input id="password" label="Password" type="password" value={this.state.newPassword} onChange={this.handlePasswordChange}/>
-                  </div>
-                  <div className="form-group">
-                    <Input id="password2" label="Confirm Password" type="password" value={this.state.confirmNewPassword} onChange={this.handleConfirmPasswordChange}/>
-                  </div>
-                  <Button type="submit" classes="btn btn-primary w-100" label="Update Password" onClick={this.updatePassword}/>
-                </form>
+      return (
+        <div className="container h-100">
+          <div className="row h-100 align-items-center justify-content-center">
+            <div className="col-6 h-75">
+              <div className="card h-100">
+                <img id="profile-photo" className="card-img-top" src={photo} alt="Profile Photo"/>
+                <div className="card-body">
+                  <h6 className="card-title text-center">{this.state.username}</h6>
+                  <form className="w-75">
+                    <div className="form-group">
+                      <Input id="password" label="Password" type="password" value={this.state.newPassword} onChange={this.handlePasswordChange}/>
+                    </div>
+                    <div className="form-group">
+                      <Input id="password2" label="Confirm Password" type="password" value={this.state.confirmNewPassword} onChange={this.handleConfirmPasswordChange}/>
+                    </div>
+                    <Button type="submit" classes="btn btn-primary w-100" label="Update Password" onClick={this.updatePassword}/>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+
+    // } else {
+      // if token invalid/not logged in, redirect to login
+    
+    // }
+
+    
 
   }
 }

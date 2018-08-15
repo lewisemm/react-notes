@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Input, Note } from './inputs/inputs';
+import { Input, NoteCard } from './inputs/inputs';
 
 class Dashboard extends Component {
 
@@ -34,7 +34,7 @@ class Dashboard extends Component {
   render() {
 
     const notes = this.state.notes.map((item, index) => {
-      return <Note key={index} title={item.title} note={item.note} />
+      return <NoteCard id={item.id} key={index} title={item.title} note={item.note} />
     });
     
     return(
@@ -69,7 +69,7 @@ class Dashboard extends Component {
         <div className="row">
           { notes }
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center page-footer">
           <nav aria-label="Page navigation example">
             <ul className="pagination">
               <li className="page-item"><a className="page-link" href="#">Previous</a></li>

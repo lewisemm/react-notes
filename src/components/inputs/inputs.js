@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function Input(props) {
   
@@ -46,9 +47,10 @@ export function TextArea(props) {
   );
 }
 
-export function Note(props) {
+export function NoteCard(props) {
   const titleChars = props.title.length;
   const noteChars = props.title.length;
+  // <Link></Link>
 
   let title = '', note = '';
 
@@ -72,7 +74,8 @@ export function Note(props) {
         </div>
         <div className="card-body">
           <p className="card-text">{ note }</p>
-          <a href="#" className="card-link">Details</a>
+          <Link to={`/notes/${props.id}`} className="card-link">Details</Link>
+          
           <a href="#" className="card-link">Delete Note</a>
         </div>
       </div>

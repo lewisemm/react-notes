@@ -3,14 +3,15 @@ import axios from 'axios';
 
 import { Input, Button, TextArea } from './inputs/inputs';
 
-class Notes extends Component {
+class NoteDetails extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       title: '',
-      note: ''
+      note: '',
+      id: 0
     }
 
     this.handleTitle = this.handleTitle.bind(this);
@@ -27,29 +28,53 @@ class Notes extends Component {
     console.log(this.state.note);
   }
 
-  createNote(event) {
-    event.preventDefault();
-
-    const data = {
-      title: this.state.title,
-      note: this.state.note,
-    }
+  componentDidMount() {
     const token = localStorage.getItem("token");
+    console.log(this.props.match.params.number);
+    const note_id = this.props.match.params.number;
 
     axios({
-        method: 'post',
-        data: data,
-        headers: {
-          'Authorization': `JWT ${token}`
-        },
-        url: "http://localhost:8000/api/notes/"
+      url: `http://localhost:8000/api/notes/${note_id}/`,
+      headers: {
+        'Authorization': `JWT ${token}`
+      },
+    })
+    .then(res => {
+      this.setState({
+        title: res.data.title,
+        note: res.data.note,
+        id: res.data.id
       })
-      .then(res => {
-        console.log("note created");
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    })
+    .catch(error => {
+      console.log("Maybe this note does not exist?");
+    })
+  }
+
+  createNote(event) {
+    console.log("Do absolutely nothing!!");
+    // event.preventDefault();
+
+    // const data = {
+    //   title: this.state.title,
+    //   note: this.state.note,
+    // }
+    // const token = localStorage.getItem("token");
+
+    // axios({
+    //     method: 'post',
+    //     data: data,
+    //     headers: {
+    //       'Authorization': `JWT ${token}`
+    //     },
+    //     url: "http://localhost:8000/api/notes/"
+    //   })
+    //   .then(res => {
+    //     console.log("note created");
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
 
   }
 
@@ -66,7 +91,7 @@ class Notes extends Component {
               <div className="form-group">
                 <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
               </div>
-              <Button type="submit" classes="btn btn-primary w-100" label="Create Note" onClick={this.createNote}/>
+              <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onClick={this.createNote}/>
             </form>
           </div>
         </div>
@@ -76,4 +101,4 @@ class Notes extends Component {
 
 }
 
-export default Notes;
+export default NoteDetails;
