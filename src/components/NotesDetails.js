@@ -17,6 +17,7 @@ class NoteDetails extends Component {
     this.handleTitle = this.handleTitle.bind(this);
     this.handleNote = this.handleNote.bind(this);
     this.createNote = this.createNote.bind(this);
+    this.editNote = this.editNote.bind(this);
   }
 
   handleTitle(event) {
@@ -25,12 +26,10 @@ class NoteDetails extends Component {
 
   handleNote(event) {
     this.setState({note: event.target.value});
-    console.log(this.state.note);
   }
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-    console.log(this.props.match.params.number);
     const note_id = this.props.match.params.number;
 
     axios({
@@ -50,6 +49,33 @@ class NoteDetails extends Component {
       console.log("Maybe this note does not exist?");
     })
   }
+
+  editNote(event) {
+    event.preventDefault();
+
+    const data = {
+      title: this.state.title,
+      note: this.state.note,
+    }
+    const token = localStorage.getItem("token");
+
+    axios({
+        method: 'put',
+        data: data,
+        headers: {
+          'Authorization': `JWT ${token}`
+        },
+        url: `http://localhost:8000/api/notes/${this.state.id}/`
+      })
+      .then(res => {
+        console.log("note edited");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+  }
+
 
   createNote(event) {
     console.log("Do absolutely nothing!!");
@@ -91,7 +117,7 @@ class NoteDetails extends Component {
               <div className="form-group">
                 <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
               </div>
-              <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onClick={this.createNote}/>
+              <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onClick={this.editNote}/>
             </form>
           </div>
         </div>
