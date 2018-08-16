@@ -10,6 +10,40 @@ class Dashboard extends Component {
     this.state = {
       notes: []
     }
+
+    this.deleteNote = this.deleteNote.bind(this);
+  }
+
+  deleteNote(noteId, event) {
+    event.preventDefault();
+    const token = localStorage.getItem("token");
+
+    axios({
+      url: `http://localhost:8000/api/notes/${noteId}/`,
+      headers: {
+        Authorization: `JWT ${token}`
+      },
+      method: 'delete'
+    })
+    .then(res => {
+
+      // one note deleted. state needs to have the current data
+      axios({
+        method: 'get',
+        headers: {
+          'Authorization': `JWT ${token}`
+        },
+        url: "http://localhost:8000/api/notes/",
+      })
+      .then(res => {
+        this.setState({notes: res.data});
+      });
+
+    })
+    .catch(error => {
+      console.log("Could not delete notes");
+    });
+
   }
 
   componentDidMount() {
@@ -34,7 +68,7 @@ class Dashboard extends Component {
   render() {
 
     const notes = this.state.notes.map((item, index) => {
-      return <NoteCard id={item.id} key={index} title={item.title} note={item.note} />
+      return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
     });
     
     return(
