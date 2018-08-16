@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
@@ -13,7 +14,8 @@ class SignIn extends Component {
       username: '',
       password: '',
       errorMsg: '',
-      token: null
+      token: null,
+      authenticated: false
     }
 
     this.signInUser = this.signInUser.bind(this);
@@ -28,26 +30,56 @@ class SignIn extends Component {
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/api-token-verify/",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `JWT ${token}`
+      },
+      data: {
+        token: token
+      }
+    })
+    .then(res => {
+      this.setState({authenticated: true });
+    })
+    .catch(error => {
+      this.setState({authenticated: false });
+    });
+  }
   
   signInUser(event) {
     event.preventDefault();
 
-    const url = "http://localhost:8000/api/api-token-auth/";
-
-    const data = {
-      'username': this.state.username,
-      'password': this.state.password,
-    }
-
-    axios.post(url, data).then(res => {
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/api-token-auth/",
+      data: {
+        'username': this.state.username,
+        'password': this.state.password,
+      }
+    })
+    .then(res => {
       localStorage.setItem('token', res.data.token);
-    }).catch(err => {
-      console.log(err);
+      this.setState({authenticated: true });
+    }).catch(error => {
+      this.setState({authenticated: false });
+      console.log("Error message here");
     });
   }
 
 
   render() {
+
+    if (this.state.authenticated === true) {
+      
+      return <Redirect to="/dashboard" />
+    }
 
     return (
 
