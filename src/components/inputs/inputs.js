@@ -69,14 +69,40 @@ export function NoteCard(props) {
   return (
     <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
       <div className="card">
-        <div class="card-header">
+        <div className="card-header">
           { title }
         </div>
         <div className="card-body">
           <p className="card-text">{ note }</p>
           <Link to={`/notes/${props.id}`} className="card-link">Details</Link>
           
-          <a href="#" className="card-link">Delete Note</a>
+          <a href={`#modalId${props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
+        </div>
+        <Modal id={props.id} modalTitle="Delete Note?" modalBody="You cannot recover from this operation!" buttonLabel="Delete" onClick={props.onClick}/>
+      </div>
+    </div>
+  );
+}
+
+export function Modal(props) {
+
+  return (
+    <div className="modal fade" id={`modalId${props.id}`} tabindex="-1" role="dialog" aria-labelledby={`modalId${props.id}Title`} aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id={`modalId${props.id}Title`}>{props.modalTitle}</h5>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            {props.modalBody}
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-link" data-dismiss="modal">Close</button>
+            <button type="button" data-dismiss="modal" className="btn btn-danger" onClick={props.onClick.bind(this, props.id)}>{props.buttonLabel}</button>
+          </div>
         </div>
       </div>
     </div>
