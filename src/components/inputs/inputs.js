@@ -108,3 +108,14 @@ export function Modal(props) {
     </div>
   );
 }
+
+export function Alert(props) {
+  return (
+    <div className={`alert ${props.alertContext}`} role="alert">
+      { props.message }
+      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  );
+}

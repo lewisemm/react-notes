@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+
 import { Input, NoteCard } from './inputs/inputs';
 
 class Dashboard extends Component {
@@ -58,7 +60,6 @@ class Dashboard extends Component {
       })
       .then(res => {
         this.setState({notes: res.data});
-        console.log(res);
       })
       .catch(err => {
         console.log(err);
@@ -79,7 +80,10 @@ class Dashboard extends Component {
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                 <div className="dropdown-menu">
-                  <a className="dropdown-item" href="#">Profile</a>
+
+                  <Link to="/profile" className="dropdown-item">Profile</Link>
+
+                  
                   <div className="dropdown-divider"></div>
                   <a className="dropdown-item" href="#">Logout</a>
                 </div>

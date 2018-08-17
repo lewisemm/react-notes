@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import { Input, Button } from './inputs/inputs';
-import { Alert } from './alerts/alerts';
+import { Input, Button, Alert } from './inputs/inputs';
 
 class SignIn extends Component {
 
@@ -13,9 +12,10 @@ class SignIn extends Component {
     this.state = {
       username: '',
       password: '',
-      errorMsg: '',
       token: null,
-      authenticated: false
+      authenticated: false,
+      alertContext: '',
+      alertMsg: ''
     }
 
     this.signInUser = this.signInUser.bind(this);
@@ -33,6 +33,13 @@ class SignIn extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
+
+    if (typeof(this.props.location.state) != "undefined") {
+      this.setState({
+        alertContext: this.props.location.state.alertContext,
+        alertMsg: this.props.location.state.alertMsg,
+      });
+    }
 
     axios({
       method: "post",
@@ -89,6 +96,11 @@ class SignIn extends Component {
             <div className="container">
               <div className="row justify-content-center">
                 <div className="form-group col-4">
+                  <Alert alertContext={ this.state.alertContext || "alert-success d-none"} message={ this.state.alertMsg || ""}/>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
                   <Input id="username" label="Username" type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
                 </div>
               </div>
@@ -100,11 +112,6 @@ class SignIn extends Component {
               <div className="row justify-content-center">
                 <div className="form-group col-4">
                   <Button label="Sign In" classes="btn btn-primary w-100" onClick={this.signInUser} type="submit"/>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="form-group col-4">
-                  <Alert classes="alert alert-danger" message={this.state.token}/>
                 </div>
               </div>
               <div className="row justify-content-center">
