@@ -28,5 +28,20 @@ export function Button(props) {
       onClick={props.onClick}>{ props.label }
     </button>
   );
+}
 
+export function TextArea(props) {
+  return (
+    <div>
+      <label htmlFor={props.id}>{props.label}</label>
+      <textarea
+        className="form-control"
+        id={props.id}
+        rows={props.rows}
+        placeholder={props.label}
+        value={props.value}
+        onChange={props.onChange}>
+      </textarea>
+    </div>
+  );
 }
