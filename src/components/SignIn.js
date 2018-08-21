@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button, Alert } from './inputs/inputs';
@@ -126,7 +126,7 @@ class SignIn extends Component {
                       <p>Don't have an account? </p>
                     </div>
                     <div className="row justify-content-center">
-                      <Button label="Change onClick handler here too" classes="btn btn-outline-primary w-100" type="button"/>
+                      <Link to="/" className="btn btn-outline-primary">Sign Up</Link>
                     </div>
                   </div>
                 </div>
