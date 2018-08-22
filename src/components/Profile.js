@@ -33,7 +33,6 @@ class Profile extends Component {
   componentDidMount() {
     const token = localStorage.getItem('token') || "abcd";
     
-    
     axios({
       method: 'get',
       url: "http://localhost:8000/api/me/",
@@ -46,17 +45,16 @@ class Profile extends Component {
       }
     })
     .then(res => {
-      this.setState({
-        username: res.data.username,
-        isAuth: true
-      });
+      // this.setState({
+      //   username: res.data.username,
+      //   authenticated: true
+      // });
 
       localStorage.setItem("user_id", res.data.id);
     })
     .catch(error => {
-      this.setState({ isAuth: false });
-
-      return <Route render={() => <Redirect to="/login" />}/>;
+      console.log(error);
+      // this.setState({ authenticated: false });
     });
   }
 

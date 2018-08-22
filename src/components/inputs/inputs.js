@@ -50,8 +50,6 @@ export function TextArea(props) {
 export function NoteCard(props) {
   const titleChars = props.title.length;
   const noteChars = props.title.length;
-  // <Link></Link>
-
   let title = '', note = '';
 
   if (titleChars >0 && titleChars < 44) {
@@ -117,5 +115,61 @@ export function Alert(props) {
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+  );
+}
+
+export function PageFooter(props) {
+
+  const itemCount = props.itemCount === undefined ? 1 : props.itemCount;
+  const pageCount = Math.ceil(itemCount / 12);
+  const pages = Array(pageCount).fill(0);
+
+
+  const previousButton = (
+    props.currentPage === 1 ?
+    <li className="page-item disabled"><a className="page-link" href="#">Previous</a></li> :
+    <li
+      className="page-item"
+      onClick={props.onClick.bind(this, props.currentPage - 1)}>
+      <a className="page-link" href="#">Previous</a>
+    </li>
+  );
+
+  const nextButton = (
+    props.currentPage === pageCount ?
+    <li className="page-item disabled"><a className="page-link" href="#">Next</a></li> :
+    <li
+      className="page-item"
+      onClick={props.onClick.bind(this, props.currentPage + 1)}>
+      <a className="page-link" href="#">Next</a>
+    </li>
+  );
+
+
+  const pageButtons = pages.map((item, index) => {
+    if (props.currentPage === (index + 1) ) {
+      return <li
+              key={index + 1}
+              className="page-item active"
+              onClick={props.onClick.bind(this, index + 1)}>
+              <a className="page-link" href="#">{ index + 1 }</a>
+            </li>;
+    }
+    return <li
+            key={index + 1}
+            className="page-item"
+            onClick={props.onClick.bind(this, index + 1)}>
+            <a className="page-link" href="#">{ index + 1 }</a>
+          </li>;
+  });
+
+  return (
+    <nav aria-label="Page navigation example">
+      <ul className="pagination">
+        { previousButton }
+        { pageButtons }
+        { nextButton }
+      </ul>
+    </nav>
   );
 }

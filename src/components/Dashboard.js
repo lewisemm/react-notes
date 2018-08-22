@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import { Input, NoteCard } from './inputs/inputs';
+import { Input, NoteCard, PageFooter } from './inputs/inputs';
 
 class Dashboard extends Component {
 
@@ -10,12 +10,16 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      notes: [],
-      authenticated: true
+      data: {
+        results: []
+      },
+      authenticated: true,
+      currentPage: 1
     }
 
     this.deleteNote = this.deleteNote.bind(this);
     this.logout = this.logout.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
 
   deleteNote(noteId, event) {
@@ -40,7 +44,7 @@ class Dashboard extends Component {
         url: "http://localhost:8000/api/notes/",
       })
       .then(res => {
-        this.setState({notes: res.data});
+        this.setState({data: res.data});
       });
 
     })
@@ -62,25 +66,50 @@ class Dashboard extends Component {
     const token = localStorage.getItem("token");
 
     axios({
+      method: 'get',
+      headers: {
+        'Authorization': `JWT ${token}`
+      },
+      url: "http://localhost:8000/api/notes/",
+    })
+    .then(res => {
+      this.setState({data: res.data});
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  changePage(pageNo, event) {
+    event.preventDefault();
+
+    const token = localStorage.getItem("token");
+    
+    axios({
         method: 'get',
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: "http://localhost:8000/api/notes/",
-      })
-      .then(res => {
-        this.setState({notes: res.data});
-      })
-      .catch(err => {
-        console.log(err);
+        url: `http://localhost:8000/api/notes/?page=${pageNo}`,
+    })
+    .then(res => {
+      this.setState({
+        data: res.data,
+        currentPage: pageNo
       });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   render() {
 
     if (this.state.authenticated === true) {
 
-      const notes = this.state.notes.map((item, index) => {
+      console.log("Here ist der item count on diese side", this.state.data.count);
+
+      const notes = this.state.data.results.map((item, index) => {
         return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
       });
       
@@ -92,10 +121,7 @@ class Dashboard extends Component {
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                   <div className="dropdown-menu">
-
                     <Link to="/profile" className="dropdown-item">Profile</Link>
-
-                    
                     <div className="dropdown-divider"></div>
                     <Link to="/login" onClick={this.logout} className="dropdown-item">Logout</Link>
                   </div>
@@ -120,15 +146,13 @@ class Dashboard extends Component {
             { notes }
           </div>
           <div className="row justify-content-center page-footer">
-            <nav aria-label="Page navigation example">
-              <ul className="pagination">
-                <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                <li className="page-item"><a className="page-link" href="#">Next</a></li>
-              </ul>
-            </nav>
+            <PageFooter
+              previous={this.state.data.previous}
+              next={this.state.data.next}
+              itemCount={this.state.data.count}
+              onClick={this.changePage}
+              currentPage={this.state.currentPage}
+            />
           </div>
         </div>
       );
