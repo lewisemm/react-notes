@@ -3,19 +3,21 @@ import axios from 'axios';
 
 import { Input, Button, TextArea } from './inputs/inputs';
 
-class Notes extends Component {
+class NoteDetails extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       title: '',
-      note: ''
+      note: '',
+      id: 0
     }
 
     this.handleTitle = this.handleTitle.bind(this);
     this.handleNote = this.handleNote.bind(this);
     this.createNote = this.createNote.bind(this);
+    this.editNote = this.editNote.bind(this);
   }
 
   handleTitle(event) {
@@ -24,10 +26,31 @@ class Notes extends Component {
 
   handleNote(event) {
     this.setState({note: event.target.value});
-    console.log(this.state.note);
   }
 
-  createNote(event) {
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    const note_id = this.props.match.params.number;
+
+    axios({
+      url: `http://localhost:8000/api/notes/${note_id}/`,
+      headers: {
+        'Authorization': `JWT ${token}`
+      },
+    })
+    .then(res => {
+      this.setState({
+        title: res.data.title,
+        note: res.data.note,
+        id: res.data.id
+      })
+    })
+    .catch(error => {
+      console.log("Maybe this note does not exist?");
+    })
+  }
+
+  editNote(event) {
     event.preventDefault();
 
     const data = {
@@ -37,19 +60,47 @@ class Notes extends Component {
     const token = localStorage.getItem("token");
 
     axios({
-        method: 'post',
+        method: 'put',
         data: data,
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: "http://localhost:8000/api/notes/"
+        url: `http://localhost:8000/api/notes/${this.state.id}/`
       })
       .then(res => {
-        console.log("note created");
+        console.log("note edited");
       })
       .catch(error => {
         console.log(error);
       });
+
+  }
+
+
+  createNote(event) {
+    console.log("Do absolutely nothing!!");
+    // event.preventDefault();
+
+    // const data = {
+    //   title: this.state.title,
+    //   note: this.state.note,
+    // }
+    // const token = localStorage.getItem("token");
+
+    // axios({
+    //     method: 'post',
+    //     data: data,
+    //     headers: {
+    //       'Authorization': `JWT ${token}`
+    //     },
+    //     url: "http://localhost:8000/api/notes/"
+    //   })
+    //   .then(res => {
+    //     console.log("note created");
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
 
   }
 
@@ -66,7 +117,7 @@ class Notes extends Component {
               <div className="form-group">
                 <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
               </div>
-              <Button type="submit" classes="btn btn-primary w-100" label="Create Note" onClick={this.createNote}/>
+              <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onClick={this.editNote}/>
             </form>
           </div>
         </div>
@@ -76,4 +127,4 @@ class Notes extends Component {
 
 }
 
-export default Notes;
+export default NoteDetails;

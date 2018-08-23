@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { Input, Button } from './inputs/inputs';
-import { Alert } from './alerts/alerts';
+import { Input, Button, Alert } from './inputs/inputs';
 
 class SignIn extends Component {
 
@@ -12,8 +12,10 @@ class SignIn extends Component {
     this.state = {
       username: '',
       password: '',
-      errorMsg: '',
-      token: null
+      token: null,
+      authenticated: false,
+      alertContext: '',
+      alertMsg: ''
     }
 
     this.signInUser = this.signInUser.bind(this);
@@ -28,26 +30,63 @@ class SignIn extends Component {
   handleUsernameChange(event) {
     this.setState({ username: event.target.value });
   }
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+
+    if (typeof(this.props.location.state) != "undefined") {
+      this.setState({
+        alertContext: this.props.location.state.alertContext,
+        alertMsg: this.props.location.state.alertMsg,
+      });
+    }
+
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/api-token-verify/",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `JWT ${token}`
+      },
+      data: {
+        token: token
+      }
+    })
+    .then(res => {
+      this.setState({authenticated: true });
+    })
+    .catch(error => {
+      this.setState({authenticated: false });
+    });
+  }
   
   signInUser(event) {
     event.preventDefault();
 
-    const url = "http://localhost:8000/api/api-token-auth/";
-
-    const data = {
-      'username': this.state.username,
-      'password': this.state.password,
-    }
-
-    axios.post(url, data).then(res => {
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/api-token-auth/",
+      data: {
+        'username': this.state.username,
+        'password': this.state.password,
+      }
+    })
+    .then(res => {
       localStorage.setItem('token', res.data.token);
-    }).catch(err => {
-      console.log(err);
+      this.setState({authenticated: true });
+    }).catch(error => {
+      this.setState({authenticated: false });
+      console.log("Error message here");
     });
   }
 
 
   render() {
+
+    if (this.state.authenticated === true) {
+      
+      return <Redirect to="/dashboard" />
+    }
 
     return (
 
@@ -55,6 +94,11 @@ class SignIn extends Component {
         <div className="row h-100 align-items-center justify-content-center">
           <form className="w-100">
             <div className="container">
+              <div className="row justify-content-center">
+                <div className="form-group col-4">
+                  <Alert alertContext={ this.state.alertContext || "alert-success d-none"} message={ this.state.alertMsg || ""}/>
+                </div>
+              </div>
               <div className="row justify-content-center">
                 <div className="form-group col-4">
                   <Input id="username" label="Username" type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
@@ -72,11 +116,6 @@ class SignIn extends Component {
               </div>
               <div className="row justify-content-center">
                 <div className="form-group col-4">
-                  <Alert classes="alert alert-danger" message={this.state.token}/>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="form-group col-4">
                   <hr/>
                 </div>
               </div>
@@ -87,7 +126,7 @@ class SignIn extends Component {
                       <p>Don't have an account? </p>
                     </div>
                     <div className="row justify-content-center">
-                      <Button label="Change onClick handler here too" classes="btn btn-outline-primary w-100" type="button"/>
+                      <Link to="/" className="btn btn-outline-primary">Sign Up</Link>
                     </div>
                   </div>
                 </div>

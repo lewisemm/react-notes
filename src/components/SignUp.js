@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
@@ -94,11 +95,6 @@ class SignUp extends Component {
               </div>
               <div className="row justify-content-center">
                 <div className="form-group col-4">
-                  <Alert classes="alert alert-danger" message={this.state.errorMsg}/>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="form-group col-4">
                   <hr/>
                 </div>
               </div>
@@ -109,7 +105,7 @@ class SignUp extends Component {
                       <p>Have an account? </p>
                     </div>
                     <div className="row justify-content-center">
-                      <Button label="Change onClick handler here" onClick={this.createUser} classes="btn btn-outline-primary w-100" type="button"/>
+                      <Link to="/login" className="btn btn-outline-primary">Sign In</Link>
                     </div>
                   </div>
                 </div>
