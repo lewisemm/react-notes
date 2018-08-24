@@ -14,12 +14,18 @@ class Dashboard extends Component {
         results: []
       },
       authenticated: true,
-      currentPage: 1
+      currentPage: 1,
+      searchText: ''
     }
 
     this.deleteNote = this.deleteNote.bind(this);
     this.logout = this.logout.bind(this);
     this.changePage = this.changePage.bind(this);
+    this.handleSearchText = this.handleSearchText.bind(this);
+  }
+
+  handleSearchText(event) {
+    this.setState({searchText: event.target.value});
   }
 
   deleteNote(noteId, event) {
@@ -106,10 +112,12 @@ class Dashboard extends Component {
   render() {
 
     if (this.state.authenticated === true) {
-
-      console.log("Here ist der item count on diese side", this.state.data.count);
-
       const notes = this.state.data.results.map((item, index) => {
+
+        if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
+          item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
+          return;
+        }
         return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
       });
       
@@ -136,7 +144,7 @@ class Dashboard extends Component {
             <div className="col-7">
               <form>
                 <div className="form-group">
-                  <input type="text" className="form-control" id="search-field" aria-describedby="searchHelp" placeholder="Search"/>
+                  <input type="text" className="form-control" id="search-field" aria-describedby="searchHelp" placeholder="Search" value={this.state.searchText} onChange={this.handleSearchText}/>
                   <small id="searchHelp" className="form-text text-muted">Filter notes via search.</small>
                 </div>
               </form>
