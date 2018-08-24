@@ -76,34 +76,6 @@ class NoteDetails extends Component {
 
   }
 
-
-  createNote(event) {
-    console.log("Do absolutely nothing!!");
-    // event.preventDefault();
-
-    // const data = {
-    //   title: this.state.title,
-    //   note: this.state.note,
-    // }
-    // const token = localStorage.getItem("token");
-
-    // axios({
-    //     method: 'post',
-    //     data: data,
-    //     headers: {
-    //       'Authorization': `JWT ${token}`
-    //     },
-    //     url: "http://localhost:8000/api/notes/"
-    //   })
-    //   .then(res => {
-    //     console.log("note created");
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
-
-  }
-
   render() {
 
     return(
