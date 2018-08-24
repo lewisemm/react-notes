@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import { Input, NoteCard, PageFooter } from './inputs/inputs';
+import {
+  Input, NoteCard, PageFooter,
+  Button, TextArea, Alert }
+  from './inputs/inputs';
 
 class Dashboard extends Component {
 
@@ -15,17 +18,46 @@ class Dashboard extends Component {
       },
       authenticated: true,
       currentPage: 1,
-      searchText: ''
+      searchText: "",
+      title: "",
+      note: "",
+      alertContext: "",
+      alertMsg: ""
     }
 
     this.deleteNote = this.deleteNote.bind(this);
     this.logout = this.logout.bind(this);
     this.changePage = this.changePage.bind(this);
     this.handleSearchText = this.handleSearchText.bind(this);
+    this.handleTitle = this.handleTitle.bind(this);
+    this.handleNote = this.handleNote.bind(this);
+    this.refreshNotes = this.refreshNotes.bind(this);
+    this.createNote = this.createNote.bind(this);
   }
 
   handleSearchText(event) {
     this.setState({searchText: event.target.value});
+  }
+
+  handleTitle(event) {
+    this.setState({title: event.target.value});
+  }
+
+  handleNote(event) {
+    this.setState({note: event.target.value});
+  }
+
+  refreshNotes(token) {
+    axios({
+      method: 'get',
+      headers: {
+        'Authorization': `JWT ${token}`
+      },
+      url: "http://localhost:8000/api/notes/",
+    })
+    .then(res => {
+      this.setState({data: res.data});
+    });
   }
 
   deleteNote(noteId, event) {
@@ -40,19 +72,11 @@ class Dashboard extends Component {
       method: 'delete'
     })
     .then(res => {
-
-      // one note deleted. state needs to have the current data
-      axios({
-        method: 'get',
-        headers: {
-          'Authorization': `JWT ${token}`
-        },
-        url: "http://localhost:8000/api/notes/",
-      })
-      .then(res => {
-        this.setState({data: res.data});
+      this.refreshNotes(token);
+      this.setState({
+        alertContext:"alert-danger",
+        alertMsg: "Note successfully deleted!"
       });
-
     })
     .catch(error => {
       console.log("Could not delete notes");
@@ -109,6 +133,37 @@ class Dashboard extends Component {
     });
   }
 
+  createNote(event) {
+    event.preventDefault();
+
+    const data = {
+      title: this.state.title,
+      note: this.state.note,
+    }
+    const token = localStorage.getItem("token");
+
+    axios({
+        method: 'post',
+        data: data,
+        headers: {
+          'Authorization': `JWT ${token}`
+        },
+        url: "http://localhost:8000/api/notes/"
+    })
+    .then(res => {
+      this.refreshNotes(token);
+      this.setState({
+        alertContext:"alert-success",
+        alertMsg: "Note successfully created!",
+        title: "",
+        note: ""
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
   render() {
 
     if (this.state.authenticated === true) {
@@ -139,7 +194,35 @@ class Dashboard extends Component {
           </div>
           <div className="row">
             <div className="col-3">
-              <button type="button" className="btn btn-primary">Add Note</button>
+              <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#createNote">
+                Add Note
+              </button>
+              <div class="modal fade" id="createNote" tabindex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <form>
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="createNoteLabel">Create a new note.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div className="form-group">
+                          <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle}/>
+                        </div>
+                        <div className="form-group">
+                          <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" onClick={this.createNote}>Save</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="col-7">
               <form>
@@ -148,6 +231,11 @@ class Dashboard extends Component {
                   <small id="searchHelp" className="form-text text-muted">Filter notes via search.</small>
                 </div>
               </form>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-6">
+              <Alert alertContext={this.state.alertContext || "alert-success d-none"} message={this.state.alertMsg || ""}/>
             </div>
           </div>
           <div className="row">
