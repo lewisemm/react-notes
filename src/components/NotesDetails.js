@@ -16,7 +16,6 @@ class NoteDetails extends Component {
 
     this.handleTitle = this.handleTitle.bind(this);
     this.handleNote = this.handleNote.bind(this);
-    this.createNote = this.createNote.bind(this);
     this.editNote = this.editNote.bind(this);
   }
 
