@@ -56,7 +56,13 @@ class Dashboard extends Component {
       url: "http://localhost:8000/api/notes/",
     })
     .then(res => {
-      this.setState({data: res.data});
+      this.setState(
+        {
+          data: {
+            results: res.data
+          }
+        }
+      );
     });
   }
 
@@ -73,10 +79,12 @@ class Dashboard extends Component {
     })
     .then(res => {
       this.refreshNotes(token);
-      this.setState({
-        alertContext:"alert-danger",
-        alertMsg: "Note successfully deleted!"
-      });
+      this.setState(
+        {
+          alertContext:"alert-danger",
+          alertMsg: "Note successfully deleted!"
+        }
+      );
     })
     .catch(error => {
       console.log("Could not delete notes");
@@ -103,7 +111,13 @@ class Dashboard extends Component {
       url: "http://localhost:8000/api/notes/",
     })
     .then(res => {
-      this.setState({data: res.data});
+      this.setState(
+        {
+          data: {
+            results: res.data
+          }
+        }
+      );
     })
     .catch(err => {
       console.log(err);
@@ -124,7 +138,9 @@ class Dashboard extends Component {
     })
     .then(res => {
       this.setState({
-        data: res.data,
+        data: {
+          results: res.data,
+        },
         currentPage: pageNo
       });
     })
@@ -152,12 +168,14 @@ class Dashboard extends Component {
     })
     .then(res => {
       this.refreshNotes(token);
-      this.setState({
-        alertContext:"alert-success",
-        alertMsg: "Note successfully created!",
-        title: "",
-        note: ""
-      });
+      this.setState(
+        {
+          alertContext:"alert-success",
+          alertMsg: "Note successfully created!",
+          title: "",
+          note: ""
+        }
+      );
     })
     .catch(error => {
       console.log(error);
@@ -167,14 +185,28 @@ class Dashboard extends Component {
   render() {
 
     if (this.state.authenticated === true) {
-      const notes = this.state.data.results.map((item, index) => {
 
-        if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
-          item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
-          return;
-        }
-        return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
-      });
+      let notes;
+
+      console.log("typeof(this.state.data) == ", typeof(this.state.data));
+
+      if (typeof(this.state.data.results) === 'undefined' || this.state.data.results.length === 0) {
+        notes = (
+          <div class="col-12">
+            <Alert alertContext="alert-warning" message="You have not created any notes so far."/>
+          </div>
+        );
+      } else {
+        notes = this.state.data.results.map((item, index) => {
+
+          if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
+            item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
+            return;
+          }
+          return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
+        });
+      }
+      
       
       return(
         <div className="container h-100">
@@ -238,7 +270,7 @@ class Dashboard extends Component {
               <Alert alertContext={this.state.alertContext || "alert-success d-none"} message={this.state.alertMsg || ""}/>
             </div>
           </div>
-          <div className="row">
+          <div className="row h-75">
             { notes }
           </div>
           <div className="row justify-content-center page-footer">
