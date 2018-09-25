@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
@@ -14,7 +14,8 @@ class SignUp extends Component {
       username: '',
       password: '',
       password2: '',
-      errorMsg: ''
+      errorMsg: '',
+      authenticated: false
     }
 
     this.createUser = this.createUser.bind(this);
@@ -49,9 +50,11 @@ class SignUp extends Component {
           axios.post(`${url}/api-token-auth/`, data)
             .then((res) => {
               localStorage.setItem('token', res.data.token);
+              this.setState({authenticated: true });
             })
             .catch((error) => {
               console.log(error);
+              this.setState({authenticated: false });
             })
         })
         .catch((error) => {
@@ -62,10 +65,35 @@ class SignUp extends Component {
         errorMsg: "Passwords do not match!"
       });
     }
+  }
 
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/api-token-verify/",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `JWT ${token}`
+      },
+      data: {
+        token: token
+      }
+    })
+    .then(res => {
+      this.setState({authenticated: true });
+    })
+    .catch(error => {
+      this.setState({authenticated: false });
+    });
   }
 
   render() {
+
+    if (this.state.authenticated === true) {
+      return <Redirect to="/dashboard" />
+    }
 
     return (
 
