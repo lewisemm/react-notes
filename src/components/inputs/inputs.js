@@ -4,20 +4,39 @@ import { Link } from 'react-router-dom';
 export function Input(props) {
   
   const describedBy = `${props.id}Help`;
+  const feedbackId = `${props.id}Feedback`;
 
   return (
-    <div>
-    <label htmlFor={props.id}>{props.label}</label>
-    <input
-      type={props.type}
-      className="form-control"
-      id={props.id}
-      aria-describedby={describedBy}
-      placeholder={props.label}
-      value={props.value}
-      onChange={props.onChange}
-    />
-    </div>
+    props.required ? (
+      <div>
+        <label htmlFor={props.id}>{props.label}</label>
+        <input
+          type={props.type}
+          className="form-control"
+          id={props.id}
+          aria-describedby={describedBy}
+          placeholder={props.label}
+          value={props.value}
+          onChange={props.onChange}
+          required
+        />
+        <div id={feedbackId} className="invalid-feedback">{ props.feedback }</div>
+      </div>
+    ): (
+      <div>
+        <label htmlFor={props.id}>{props.label}</label>
+        <input
+          type={props.type}
+          className="form-control"
+          id={props.id}
+          aria-describedby={describedBy}
+          placeholder={props.label}
+          value={props.value}
+          onChange={props.onChange}
+        />
+      </div>
+    )
+    
   );
 }
 
@@ -32,18 +51,23 @@ export function Button(props) {
 }
 
 export function TextArea(props) {
+  const feedbackId = `${props.id}Feedback`;
   return (
     <div>
-      <label htmlFor={props.id}>{props.label}</label>
-      <textarea
-        className="form-control"
-        id={props.id}
-        rows={props.rows}
-        placeholder={props.label}
-        value={props.value}
-        onChange={props.onChange}>
-      </textarea>
-    </div>
+      <div>
+        <label htmlFor={props.id}>{props.label}</label>
+        <textarea
+          className="form-control"
+          id={props.id}
+          rows={props.rows}
+          placeholder={props.label}
+          value={props.value}
+          onChange={props.onChange}
+          required={props.required}>
+        </textarea>
+      </div>
+      <div id={feedbackId} className="invalid-feedback">{ props.feedback }</div>
+    </div> 
   );
 }
 
@@ -85,7 +109,7 @@ export function NoteCard(props) {
 export function Modal(props) {
 
   return (
-    <div className="modal fade" id={`modalId${props.id}`} tabindex="-1" role="dialog" aria-labelledby={`modalId${props.id}Title`} aria-hidden="true">
+    <div className="modal fade" id={`modalId${props.id}`} tabIndex="-1" role="dialog" aria-labelledby={`modalId${props.id}Title`} aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">

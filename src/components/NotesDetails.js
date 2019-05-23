@@ -46,7 +46,7 @@ class NoteDetails extends Component {
     })
     .catch(error => {
       console.log("Maybe this note does not exist?");
-    })
+    });
   }
 
   editNote(event) {
@@ -81,14 +81,16 @@ class NoteDetails extends Component {
       <div className="container h-100">
         <div className="row h-100 align-items-center justify-content-center">
           <div className="col-8 h-75">
-            <form>
+            <form noValidate className="needs-validation">
               <div className="form-group">
-                <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle}/>
+                <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle} required feedback="Title is a required field!"/>
               </div>
               <div className="form-group">
-                <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
+                <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} required feedback="Description is a required field!"/>
               </div>
-              <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onClick={this.editNote}/>
+              <div className="form-group">
+                <Button type="submit" classes="btn btn-primary w-100" label="Edit Note" onSubmit={this.editNote}/>
+              </div>
             </form>
           </div>
         </div>

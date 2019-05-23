@@ -150,7 +150,11 @@ class Dashboard extends Component {
   }
 
   createNote(event) {
+    console.log("I should not be seeing this!");
     event.preventDefault();
+
+    if (this.state.title.length == 0)
+      return;
 
     const data = {
       title: this.state.title,
@@ -172,13 +176,19 @@ class Dashboard extends Component {
         {
           alertContext:"alert-success",
           alertMsg: "Note successfully created!",
-          title: "",
-          note: ""
+          // title: "",
+          // note: ""
         }
       );
     })
     .catch(error => {
       console.log(error);
+      // this.setState(
+      //   {
+      //     title: "",
+      //     note: ""
+      //   }
+      // );
     });
   }
 
@@ -192,7 +202,7 @@ class Dashboard extends Component {
 
       if (typeof(this.state.data.results) === 'undefined' || this.state.data.results.length === 0) {
         notes = (
-          <div class="col-12">
+          <div className="col-12">
             <Alert alertContext="alert-warning" message="You have not created any notes so far."/>
           </div>
         );
@@ -226,30 +236,30 @@ class Dashboard extends Component {
           </div>
           <div className="row">
             <div className="col-3">
-              <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#createNote">
+              <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#createNoteModal">
                 Add Note
               </button>
-              <div class="modal fade" id="createNote" tabindex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <form>
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="createNoteLabel">Create a new note.</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <div className="modal fade" id="createNoteModal" tabIndex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                  <div className="modal-content">
+                    <form noValidate className="needs-validation">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="createNoteLabel">Create a new note.</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
+                      <div className="modal-body">
                         <div className="form-group">
-                          <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle}/>
+                          <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle} required feedback="Title is a required field!"/>
                         </div>
                         <div className="form-group">
                           <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal" onClick={this.createNote}>Save</button>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" className="btn btn-primary" onSubmit={this.createNote}>Save</button>
                       </div>
                     </form>
                   </div>
