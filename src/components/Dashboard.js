@@ -153,10 +153,7 @@ class Dashboard extends Component {
     console.log("I should not be seeing this!");
     event.preventDefault();
 
-    if (this.state.title.length == 0)
-      return;
-
-    const data = {
+    const noteData = {
       title: this.state.title,
       note: this.state.note,
     }
@@ -164,11 +161,12 @@ class Dashboard extends Component {
 
     axios({
         method: 'post',
-        data: data,
+        url: "http://localhost:8000/api/notes/",
         headers: {
+          "Content-Type": "application/json",
           'Authorization': `JWT ${token}`
         },
-        url: "http://localhost:8000/api/notes/"
+        data: noteData
     })
     .then(res => {
       this.refreshNotes(token);
@@ -176,19 +174,10 @@ class Dashboard extends Component {
         {
           alertContext:"alert-success",
           alertMsg: "Note successfully created!",
-          // title: "",
-          // note: ""
+          title: "",
+          note: ""
         }
       );
-    })
-    .catch(error => {
-      console.log(error);
-      // this.setState(
-      //   {
-      //     title: "",
-      //     note: ""
-      //   }
-      // );
     });
   }
 
@@ -242,7 +231,7 @@ class Dashboard extends Component {
               <div className="modal fade" id="createNoteModal" tabIndex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
-                    <form noValidate className="needs-validation">
+                    <form noValidate className="needs-validation" onSubmit={this.createNote}>
                       <div className="modal-header">
                         <h5 className="modal-title" id="createNoteLabel">Create a new note.</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
@@ -254,12 +243,12 @@ class Dashboard extends Component {
                           <Input label="Title" type="text" id="note-title" placeholder="Note Title" value={this.state.title} onChange={this.handleTitle} required feedback="Title is a required field!"/>
                         </div>
                         <div className="form-group">
-                          <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} />
+                          <TextArea id="note-description" label="Description" rows="7" value={this.state.note} onChange={this.handleNote} required feedback="Description is a required field!"/>
                         </div>
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" className="btn btn-primary" onSubmit={this.createNote}>Save</button>
+                        <button type="submit" className="btn btn-primary">Save</button>
                       </div>
                     </form>
                   </div>

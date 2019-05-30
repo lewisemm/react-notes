@@ -51,23 +51,40 @@ export function Button(props) {
 }
 
 export function TextArea(props) {
+  const describedBy = `${props.id}Help`;
   const feedbackId = `${props.id}Feedback`;
   return (
-    <div>
+
+    props.required ? (
       <div>
         <label htmlFor={props.id}>{props.label}</label>
         <textarea
           className="form-control"
           id={props.id}
+          aria-describedby={describedBy}
           rows={props.rows}
           placeholder={props.label}
           value={props.value}
           onChange={props.onChange}
-          required={props.required}>
+          required>
+        </textarea>
+        <div id={feedbackId} className="invalid-feedback">{ props.feedback }</div>
+      </div>
+    ) : (
+      <div>
+        <label htmlFor={props.id}>{props.label}</label>
+        <textarea
+          className="form-control"
+          id={props.id}
+          aria-describedby={describedBy}
+          rows={props.rows}
+          placeholder={props.label}
+          value={props.value}
+          onChange={props.onChange}>
         </textarea>
       </div>
-      <div id={feedbackId} className="invalid-feedback">{ props.feedback }</div>
-    </div> 
+    )
+
   );
 }
 
