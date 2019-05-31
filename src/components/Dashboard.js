@@ -153,6 +153,9 @@ class Dashboard extends Component {
     console.log("I should not be seeing this!");
     event.preventDefault();
 
+    if ((this.state.title.length == 0) || (this.state.note.length == 0))
+      return;
+
     const noteData = {
       title: this.state.title,
       note: this.state.note,
