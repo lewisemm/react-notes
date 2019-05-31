@@ -113,11 +113,11 @@ export function NoteCard(props) {
         </div>
         <div className="card-body">
           <p className="card-text">{ note }</p>
-          <Link to={`/notes/${props.id}`} className="card-link">Details</Link>
+          <Link to={`/notes/${props.id}`} className="card-link">Edit Note</Link>
           
           <a href={`#modalId${props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
         </div>
-        <Modal id={props.id} modalTitle="Delete Note?" modalBody="You cannot recover from this operation!" buttonLabel="Delete" onClick={props.onClick}/>
+        <Modal id={props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={props.onClick}/>
       </div>
     </div>
   );
