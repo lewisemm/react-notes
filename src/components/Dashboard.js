@@ -7,6 +7,8 @@ import {
   Button, TextArea, Alert }
   from './inputs/inputs';
 
+const $ = window.$;
+
 class Dashboard extends Component {
 
   constructor(props) {
@@ -181,6 +183,9 @@ class Dashboard extends Component {
           note: ""
         }
       );
+      $('#createNoteModal').modal('hide');
+      $('#createNoteForm').removeClass('was-validated');
+
     });
   }
 
@@ -234,7 +239,7 @@ class Dashboard extends Component {
               <div className="modal fade" id="createNoteModal" tabIndex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
-                    <form noValidate className="needs-validation" onSubmit={this.createNote}>
+                    <form noValidate className="needs-validation" onSubmit={this.createNote} id="createNoteForm">
                       <div className="modal-header">
                         <h5 className="modal-title" id="createNoteLabel">Create a new note.</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
