@@ -104,6 +104,12 @@ export function NoteCard(props) {
   } else {
     note = `${props.note.slice(0, 40)} ...`;
   }
+
+  handleForm = () {
+    // the notecard component probably needs to be a class because we need the functions
+    // to post and manage the state of the text input fields in this modal
+    // TODO: Convert NoteCard to class based component since it's no longer presentational.
+  }
   
   return (
     <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
@@ -114,16 +120,27 @@ export function NoteCard(props) {
         <div className="card-body">
           <p className="card-text">{ note }</p>
           <Link to={`/notes/${props.id}`} className="card-link">Edit Note</Link>
+
+          <FormModal
+            id={props.id}
+            modalTitle="Edit Note Details"
+            titleLabel="Title"
+            titleValue={props.titleValue}
+            onChange={props.handleTitle}
+            descriptionLabel={props.descriptionLabel}
+            descriptionValue={props.descriptionValue}
+            onChange={can we have 2 of these?}
+          />
           
           <a href={`#modalId${props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
         </div>
-        <Modal id={props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={props.onClick}/>
+        <YesNoModal id={props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={props.onClick}/>
       </div>
     </div>
   );
 }
 
-export function Modal(props) {
+export function YesNoModal(props) {
 
   return (
     <div className="modal fade" id={`modalId${props.id}`} tabIndex="-1" role="dialog" aria-labelledby={`modalId${props.id}Title`} aria-hidden="true">
@@ -141,6 +158,39 @@ export function Modal(props) {
           <div className="modal-footer">
             <button type="button" className="btn btn-link" data-dismiss="modal">Close</button>
             <button type="button" data-dismiss="modal" className="btn btn-danger" onClick={props.onClick.bind(this, props.id)}>{props.buttonLabel}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function FormModal(props) {
+  return (
+    <div className="modal fade" id={`formModal${props.id}`} tabIndex="-1" role="dialog" aria-labelledby={`formModal${props.id}Title`} aria-hidden="true">
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id={`formModal${props.id}Title`}>{props.modalTitle}</h5>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <form noValidate className="needs-validation" onSubmit={props.handleForm} id={`formModalForm${props.id}`}>
+              <div className="form-group">
+                <label for={`note-title${props.id}`}>{props.titleLabel}</label>
+                <Input type="text" id={`note-title${props.id}`} placeholder={props.titleLabel} value={props.titleValue} onChange={props.onChange} required feedback="Title is a required field!"/>
+              </div>
+              <div className="form-group">
+                <label for={`note-description${props.id}`}>{props.descriptionLabel}</label>
+                <TextArea id={`note-description${props.id}`} label={props.descriptionLabel} rows="7" value={props.descriptionValue} onChange={props.onChange} required feedback="Description is a required field!"/>
+              </div>
+              <div className="form-group">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" className="btn btn-primary">Save changes</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
