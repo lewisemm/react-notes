@@ -90,7 +90,7 @@ export function TextArea(props) {
 
 export function NoteCard(props) {
   const titleChars = props.title.length;
-  const noteChars = props.title.length;
+  const noteChars = props.note.length;
   let title = '', note = '';
 
   if (titleChars >0 && titleChars < 44) {
