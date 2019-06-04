@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { YesNoModal } from './inputs/inputs';
+import { YesNoModal, FormModal } from './inputs/inputs';
 
 class NoteCard extends Component {
 
   constructor(props) {
     super(props);
+
+    this.setState = {
+      title: "",
+      note: ""
+    }
+
+    this.handleTitle = this.handleTitle.bind(this);
+    this.handleNote = this.handleNote.bind(this);
+  }
+
+  handleTitle(event) {
+    this.setState({title: event.target.value});
+  }
+
+  handleNote(event) {
+    this.setState({note: event.target.value});
+  }
+
+  handleForm(event) {
+    event.preventDefault();
+    if ((this.state.title.length == 0) || (this.state.note.length == 0))
+      return;
   }
 
   render() {
@@ -34,11 +56,25 @@ class NoteCard extends Component {
           </div>
           <div className="card-body">
             <p className="card-text">{ note }</p>
-            <Link to={`/notes/${this.props.id}`} className="card-link">Edit Note</Link>
+
+            <a href={`#formModal${this.props.id}`} data-toggle="modal" className="card-link">Edit Note</a>
+
             <a href={`#modalId${this.props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
           </div>
           <YesNoModal id={this.props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={this.props.onClick}/>
         </div>
+        <FormModal
+          id={this.props.id}
+          key={this.props.id}
+          modalTitle='Edit Note Details'
+          handleForm={this.handleForm}
+          titleLabel='Title'
+          titleValue={this.props.title}
+          titleOnChange={this.handleTitle}
+          descriptionLabel='Description'
+          descriptionValue={this.props.note}
+          descriptionOnChange={this.handleNote}
+        />
       </div>
     );
   }
