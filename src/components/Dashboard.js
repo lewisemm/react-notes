@@ -153,7 +153,6 @@ class Dashboard extends Component {
   }
 
   createNote(event) {
-    console.log("I should not be seeing this!");
     event.preventDefault();
 
     if ((this.state.title.length == 0) || (this.state.note.length == 0))
