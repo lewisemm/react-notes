@@ -127,14 +127,12 @@ export function FormModal(props) {
           <div className="modal-body">
             <form noValidate className="needs-validation" onSubmit={props.handleForm} id={`formModalForm${props.id}`}>
               <div className="form-group">
-                <label for={`note-title${props.id}`}>{props.titleLabel}</label>
-                <Input type="text" id={`note-title${props.id}`} placeholder={props.titleLabel} value={props.titleValue} onChange={props.onChange} required feedback="Title is a required field!"/>
+                <Input type="text" id={`note-title${props.id}`} label={props.titleLabel} placeholder={props.titleLabel} value={props.titleValue} onChange={props.titleOnChange} required feedback="Title is a required field!"/>
               </div>
               <div className="form-group">
-                <label for={`note-description${props.id}`}>{props.descriptionLabel}</label>
-                <TextArea id={`note-description${props.id}`} label={props.descriptionLabel} rows="7" value={props.descriptionValue} onChange={props.onChange} required feedback="Description is a required field!"/>
+                <TextArea id={`note-description${props.id}`} label={props.descriptionLabel} rows="7" value={props.descriptionValue} onChange={props.descriptionOnChange} required feedback="Description is a required field!"/>
               </div>
-              <div className="form-group">
+              <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" className="btn btn-primary">Save changes</button>
               </div>
