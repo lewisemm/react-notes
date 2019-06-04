@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
+import NoteCard from './NoteCard';
 import {
-  Input, NoteCard, PageFooter,
+  Input, PageFooter,
   Button, TextArea, Alert }
   from './inputs/inputs';
 

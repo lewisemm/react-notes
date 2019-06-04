@@ -88,58 +88,6 @@ export function TextArea(props) {
   );
 }
 
-export function NoteCard(props) {
-  const titleChars = props.title.length;
-  const noteChars = props.note.length;
-  let title = '', note = '';
-
-  if (titleChars >0 && titleChars < 44) {
-    title = props.title;
-  } else {
-    title = `${props.title.slice(0, 40)} ...`;
-  }
-
-  if (noteChars >0 && noteChars < 44) {
-    note = props.note;
-  } else {
-    note = `${props.note.slice(0, 40)} ...`;
-  }
-
-  handleForm = () {
-    // the notecard component probably needs to be a class because we need the functions
-    // to post and manage the state of the text input fields in this modal
-    // TODO: Convert NoteCard to class based component since it's no longer presentational.
-  }
-  
-  return (
-    <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
-      <div className="card">
-        <div className="card-header">
-          { title }
-        </div>
-        <div className="card-body">
-          <p className="card-text">{ note }</p>
-          <Link to={`/notes/${props.id}`} className="card-link">Edit Note</Link>
-
-          <FormModal
-            id={props.id}
-            modalTitle="Edit Note Details"
-            titleLabel="Title"
-            titleValue={props.titleValue}
-            onChange={props.handleTitle}
-            descriptionLabel={props.descriptionLabel}
-            descriptionValue={props.descriptionValue}
-            onChange={can we have 2 of these?}
-          />
-          
-          <a href={`#modalId${props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
-        </div>
-        <YesNoModal id={props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={props.onClick}/>
-      </div>
-    </div>
-  );
-}
-
 export function YesNoModal(props) {
 
   return (
