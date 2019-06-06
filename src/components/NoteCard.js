@@ -1,35 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { YesNoModal, FormModal } from './inputs/inputs';
+import { YesNoModal } from './inputs/inputs';
 
 class NoteCard extends Component {
 
   constructor(props) {
     super(props);
-
-    this.setState = {
-      title: "",
-      note: ""
-    }
-
-    this.handleTitle = this.handleTitle.bind(this);
-    this.handleNote = this.handleNote.bind(this);
   }
 
-  handleTitle(event) {
-    this.setState({title: event.target.value});
-  }
-
-  handleNote(event) {
-    this.setState({note: event.target.value});
-  }
-
-  handleForm(event) {
-    event.preventDefault();
-    if ((this.state.title.length == 0) || (this.state.note.length == 0))
-      return;
-  }
+  // handleForm(event) {
+  //   event.preventDefault();
+  //   if ((this.state.title.length == 0) || (this.state.note.length == 0))
+  //     return;
+  // }
 
   render() {
     const titleChars = this.props.title.length;
@@ -47,6 +31,9 @@ class NoteCard extends Component {
     } else {
       note = `${this.props.note.slice(0, 38)} ...`;
     }
+
+    console.log("Notecards ziko hapa!");
+    console.log(this.props.notecards);
     
     return (
       <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
@@ -57,24 +44,45 @@ class NoteCard extends Component {
           <div className="card-body">
             <p className="card-text">{ note }</p>
 
-            <a href={`#formModal${this.props.id}`} data-toggle="modal" className="card-link">Edit Note</a>
+            <a href={`#editNoteModal${this.props.id}`} data-toggle="modal" className="card-link">Edit Note</a>
 
             <a href={`#modalId${this.props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
           </div>
           <YesNoModal id={this.props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={this.props.onClick}/>
+          {/* Modal */}
+          {/* <div className="modal fade" tabIndex="-1" role="dialog" id={`editNoteModal${this.props.id}`}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <form noValidate className="needs-validation" onSubmit={this.props.handleForm}>
+
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Note Details</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label htmlFor="editNoteTitle">Title</label>
+                      <input type="text" className="form-control" id="editNoteTitle" placeholder="Title" value={this.state.title} onChange={this.handleTitle} required feedback="Title is a required field!"/>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="editNoteDescription">Description</label>
+                      <input type="text" className="form-control" id="editNoteDescription" placeholder="Description" value={this.state.note} onChange={this.handleNote} required feedback="Description is a required field!"/>
+                    </div>
+                  </div>
+
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" className="btn btn-primary">Save changes</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div> */}
         </div>
-        <FormModal
-          id={this.props.id}
-          key={this.props.id}
-          modalTitle='Edit Note Details'
-          handleForm={this.handleForm}
-          titleLabel='Title'
-          titleValue={this.props.title}
-          titleOnChange={this.handleTitle}
-          descriptionLabel='Description'
-          descriptionValue={this.props.note}
-          descriptionOnChange={this.handleNote}
-        />
       </div>
     );
   }

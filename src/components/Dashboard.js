@@ -25,7 +25,8 @@ class Dashboard extends Component {
       title: "",
       note: "",
       alertContext: "",
-      alertMsg: ""
+      alertMsg: "",
+      notecards: {}
     }
 
     this.deleteNote = this.deleteNote.bind(this);
@@ -121,6 +122,23 @@ class Dashboard extends Component {
           }
         }
       );
+
+      let notecardsState = {};
+      this.state.data.results.map((item, index) => {
+        const note = {
+          "title": item.title,
+          "note": item.note,
+        };
+
+        notecardsState.id = item.id
+        notecardsState[item.id] = note;
+      });
+
+      this.setState(prevState => {
+        // create a copy of state variable notecards
+        let notecards = Object.assign(notecardsState, prevState.notecards);
+        return { notecards };
+      });
     })
     .catch(err => {
       console.log(err);
@@ -195,8 +213,6 @@ class Dashboard extends Component {
 
       let notes;
 
-      console.log("typeof(this.state.data) == ", typeof(this.state.data));
-
       if (typeof(this.state.data.results) === 'undefined' || this.state.data.results.length === 0) {
         notes = (
           <div className="col-12">
@@ -210,7 +226,8 @@ class Dashboard extends Component {
             item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
             return;
           }
-          return <NoteCard id={item.id} key={index} title={item.title} note={item.note} onClick={this.deleteNote}/>;
+          // return <NoteCard id={item.id} key={index} title={this.state.notecards[item.id].title} note={this.state.notecards[item.id].note} onClick={this.deleteNote}/>;
+          return <NoteCard id={item.id} key={index} title={item.title} note={item.note} notecards={this.state.notecards[item.id].title} onClick={this.deleteNote}/>;
         });
       }
       
