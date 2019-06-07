@@ -44,31 +44,29 @@ class NoteCard extends Component {
           <div className="modal fade" tabIndex="-1" role="dialog" id={`editNoteModal${this.props.id}`}>
             <div className="modal-dialog" role="document">
               <div className="modal-content">
-                <form noValidate className="needs-validation" onSubmit={this.props.onSubmit.bind(this, this.props.id)}>
-
+                <form noValidate className="needs-validation" onSubmit={this.props.onSubmit.bind(this, this.props.id)} id={`editNoteForm${this.props.id}`}>
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Note Details</h5>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="editNoteTitle">Title</label>
-                      <input type="text" className="form-control" id="editNoteTitle" placeholder="Title" onChange={this.props.titleOnChange} defaultValue={this.props.title} required feedback="Title is a required field!"/>
+                      <input type="text" className="form-control" id={`editNoteTitle${this.props.id}`} placeholder="Title" onChange={this.props.titleOnChange} defaultValue={this.props.title} required/>
+                      <div id={`titleFeedbackId${this.props.id}`} className="invalid-feedback">Title is a required field!</div>
                     </div>
                     <div className="form-group">
                       <label htmlFor="editNoteDescription">Description</label>
-                      <input type="text" className="form-control" id="editNoteDescription" placeholder="Description" defaultValue={this.props.note} onChange={this.props.noteOnChange} required feedback="Description is a required field!"/>
+                      <input type="text" className="form-control" id={`editNoteDescription${this.props.id}`} placeholder="Description" defaultValue={this.props.note} onChange={this.props.noteOnChange} required/>
+                      <div id={`noteFeedbackId${this.props.id}`} className="invalid-feedback">Description is a required field!</div>
                     </div>
                   </div>
-
                   <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" className="btn btn-primary">Save changes</button>
                   </div>
-
                 </form>
               </div>
             </div>

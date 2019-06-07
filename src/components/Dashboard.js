@@ -37,6 +37,7 @@ class Dashboard extends Component {
     this.handleNote = this.handleNote.bind(this);
     this.refreshNotes = this.refreshNotes.bind(this);
     this.createNote = this.createNote.bind(this);
+    this.editNote = this.editNote.bind(this);
   }
 
   handleSearchText(event) {
@@ -72,7 +73,41 @@ class Dashboard extends Component {
 
   editNote(noteId, event) {
     event.preventDefault();
-    console.log(`define edit operations for note with id: ${noteId} here`);
+    
+    // if ((this.state.title.length == 0) || (this.state.note.length == 0))
+    //   return;
+
+    const noteData = {
+      title: this.state.title,
+      note: this.state.note,
+    }
+    const token = localStorage.getItem("token");
+
+    // axios({
+    //     method: 'put',
+    //     url: `http://localhost:8000/api/notes/${noteId}/`,
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       'Authorization': `JWT ${token}`
+    //     },
+    //     data: noteData
+    // })
+    // .then(res => {
+    //   this.refreshNotes(token);
+    //   this.setState(
+    //     {
+    //       alertContext:"alert-success",
+    //       alertMsg: "Note successfully edited!",
+    //       title: "",
+    //       note: ""
+    //     }
+    //   );
+      
+    // });
+    console.log("Cleaning up validation messages...");
+    console.log(`noteId: ${noteId}`, `#editNoteModal${noteId}`, `#editNoteForm${noteId}`);
+    // $(`#editNoteModal${noteId}`).modal('hide');
+    $(`#editNoteForm${noteId}`).removeClass('was-validated');
   }
 
   deleteNote(noteId, event) {
@@ -221,7 +256,6 @@ class Dashboard extends Component {
         );
       } else {
         notes = Object.keys(this.state.notecards).map((id, index) => {
-          const mouthful = this.state.notecards[id];
           // TODO: Fix the search!
           // if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
           //   item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
@@ -231,9 +265,9 @@ class Dashboard extends Component {
             <NoteCard
               id={id}
               key={index}
-              title={mouthful.title}
+              title={this.state.notecards[id]['title']}
               titleOnChange={(e) => {this.handleTitle(e)}}
-              note={mouthful['note']}
+              note={this.state.notecards[id]['note']}
               noteOnChange={(e) => {this.handleNote(e)}}
               onClick={this.deleteNote}
               onSubmit={this.editNote}
