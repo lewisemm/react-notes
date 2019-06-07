@@ -9,12 +9,6 @@ class NoteCard extends Component {
     super(props);
   }
 
-  // handleForm(event) {
-  //   event.preventDefault();
-  //   if ((this.state.title.length == 0) || (this.state.note.length == 0))
-  //     return;
-  // }
-
   render() {
     const titleChars = this.props.title.length;
     const noteChars = this.props.note.length;
@@ -31,9 +25,6 @@ class NoteCard extends Component {
     } else {
       note = `${this.props.note.slice(0, 38)} ...`;
     }
-
-    console.log("Notecards ziko hapa!");
-    console.log(this.props.notecards);
     
     return (
       <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
@@ -50,10 +41,10 @@ class NoteCard extends Component {
           </div>
           <YesNoModal id={this.props.id} modalTitle="Delete Note?" modalBody="This operation cannot be undone!" buttonLabel="Delete" onClick={this.props.onClick}/>
           {/* Modal */}
-          {/* <div className="modal fade" tabIndex="-1" role="dialog" id={`editNoteModal${this.props.id}`}>
+          <div className="modal fade" tabIndex="-1" role="dialog" id={`editNoteModal${this.props.id}`}>
             <div className="modal-dialog" role="document">
               <div className="modal-content">
-                <form noValidate className="needs-validation" onSubmit={this.props.handleForm}>
+                <form noValidate className="needs-validation" onSubmit={this.props.onSubmit.bind(this, this.props.id)}>
 
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Note Details</h5>
@@ -65,11 +56,11 @@ class NoteCard extends Component {
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="editNoteTitle">Title</label>
-                      <input type="text" className="form-control" id="editNoteTitle" placeholder="Title" value={this.state.title} onChange={this.handleTitle} required feedback="Title is a required field!"/>
+                      <input type="text" className="form-control" id="editNoteTitle" placeholder="Title" onChange={this.props.titleOnChange} defaultValue={this.props.title} required feedback="Title is a required field!"/>
                     </div>
                     <div className="form-group">
                       <label htmlFor="editNoteDescription">Description</label>
-                      <input type="text" className="form-control" id="editNoteDescription" placeholder="Description" value={this.state.note} onChange={this.handleNote} required feedback="Description is a required field!"/>
+                      <input type="text" className="form-control" id="editNoteDescription" placeholder="Description" defaultValue={this.props.note} onChange={this.props.noteOnChange} required feedback="Description is a required field!"/>
                     </div>
                   </div>
 
@@ -81,7 +72,7 @@ class NoteCard extends Component {
                 </form>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     );

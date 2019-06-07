@@ -70,6 +70,11 @@ class Dashboard extends Component {
     });
   }
 
+  editNote(noteId, event) {
+    event.preventDefault();
+    console.log(`define edit operations for note with id: ${noteId} here`);
+  }
+
   deleteNote(noteId, event) {
     event.preventDefault();
     const token = localStorage.getItem("token");
@@ -125,20 +130,15 @@ class Dashboard extends Component {
 
       let notecardsState = {};
       this.state.data.results.map((item, index) => {
-        const note = {
-          "title": item.title,
-          "note": item.note,
-        };
-
-        notecardsState.id = item.id
-        notecardsState[item.id] = note;
+        notecardsState.id = item.id;
+        notecardsState[item.id] = item;
       });
 
-      this.setState(prevState => {
-        // create a copy of state variable notecards
-        let notecards = Object.assign(notecardsState, prevState.notecards);
-        return { notecards };
-      });
+      // notecardsState.id will still be accessible. It will have the value of the last item.id
+      // We don't want this. We should only access via notecardsState[id] where id is an int
+      delete notecardsState.id;
+
+      this.setState({notecards: notecardsState});
     })
     .catch(err => {
       console.log(err);
@@ -220,14 +220,25 @@ class Dashboard extends Component {
           </div>
         );
       } else {
-        notes = this.state.data.results.map((item, index) => {
-
-          if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
-            item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
-            return;
-          }
-          // return <NoteCard id={item.id} key={index} title={this.state.notecards[item.id].title} note={this.state.notecards[item.id].note} onClick={this.deleteNote}/>;
-          return <NoteCard id={item.id} key={index} title={item.title} note={item.note} notecards={this.state.notecards[item.id].title} onClick={this.deleteNote}/>;
+        notes = Object.keys(this.state.notecards).map((id, index) => {
+          const mouthful = this.state.notecards[id];
+          // TODO: Fix the search!
+          // if (item.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1 &&
+          //   item.note.toLowerCase().indexOf(this.state.searchText.toLowerCase()) === -1) {
+          //   return;
+          // }
+          return (
+            <NoteCard
+              id={id}
+              key={index}
+              title={mouthful.title}
+              titleOnChange={(e) => {this.handleTitle(e)}}
+              note={mouthful['note']}
+              noteOnChange={(e) => {this.handleNote(e)}}
+              onClick={this.deleteNote}
+              onSubmit={this.editNote}
+            />
+          );
         });
       }
       
