@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 export function Input(props) {
   
@@ -115,29 +114,33 @@ export function YesNoModal(props) {
 
 export function FormModal(props) {
   return (
-    <div className="modal fade" id={`formModal${props.id}`} tabIndex="-1" role="dialog" aria-labelledby={`formModal${props.id}Title`} aria-hidden="true">
+    <div className="modal fade" tabIndex="-1" role="dialog" id={`editNoteModal${props.id}`}>
       <div className="modal-dialog" role="document">
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id={`formModal${props.id}Title`}>{props.modalTitle}</h5>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <form noValidate className="needs-validation" onSubmit={props.handleForm} id={`formModalForm${props.id}`}>
+          <form noValidate className="needs-validation" onSubmit={props.onSubmit.bind(this, props.id)} id={`editNoteForm${props.id}`}>
+            <div className="modal-header">
+              <h5 className="modal-title">Edit Note Details</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
               <div className="form-group">
-                <Input type="text" id={`note-title${props.id}`} label={props.titleLabel} placeholder={props.titleLabel} value={props.titleValue} onChange={props.titleOnChange} required feedback="Title is a required field!"/>
+                <label htmlFor="editNoteTitle">Title</label>
+                <input type="text" className="form-control" id={`editNoteTitle${props.id}`} placeholder="Title" onChange={props.titleOnChange} defaultValue={props.title} required/>
+                <div id={`titleFeedbackId${props.id}`} className="invalid-feedback">Title is a required field!</div>
               </div>
               <div className="form-group">
-                <TextArea id={`note-description${props.id}`} label={props.descriptionLabel} rows="7" value={props.descriptionValue} onChange={props.descriptionOnChange} required feedback="Description is a required field!"/>
+                <label htmlFor="editNoteDescription">Description</label>
+                <input type="text" className="form-control" id={`editNoteDescription${props.id}`} placeholder="Description" defaultValue={props.note} onChange={props.noteOnChange} required/>
+                <div id={`noteFeedbackId${props.id}`} className="invalid-feedback">Description is a required field!</div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" className="btn btn-primary">Save changes</button>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" className="btn btn-primary">Save changes</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
