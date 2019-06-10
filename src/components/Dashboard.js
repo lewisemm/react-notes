@@ -74,8 +74,8 @@ class Dashboard extends Component {
   editNote(noteId, event) {
     event.preventDefault();
     
-    // if ((this.state.title.length == 0) || (this.state.note.length == 0))
-    //   return;
+    if ((this.state.title.length == 0) || (this.state.note.length == 0))
+      return;
 
     const noteData = {
       title: this.state.title,
@@ -83,31 +83,29 @@ class Dashboard extends Component {
     }
     const token = localStorage.getItem("token");
 
-    // axios({
-    //     method: 'put',
-    //     url: `http://localhost:8000/api/notes/${noteId}/`,
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       'Authorization': `JWT ${token}`
-    //     },
-    //     data: noteData
-    // })
-    // .then(res => {
-    //   this.refreshNotes(token);
-    //   this.setState(
-    //     {
-    //       alertContext:"alert-success",
-    //       alertMsg: "Note successfully edited!",
-    //       title: "",
-    //       note: ""
-    //     }
-    //   );
-      
-    // });
-    console.log("Cleaning up validation messages...");
-    console.log(`noteId: ${noteId}`, `#editNoteModal${noteId}`, `#editNoteForm${noteId}`);
-    // $(`#editNoteModal${noteId}`).modal('hide');
-    $(`#editNoteForm${noteId}`).removeClass('was-validated');
+    axios({
+        method: 'put',
+        url: `http://localhost:8000/api/notes/${noteId}/`,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `JWT ${token}`
+        },
+        data: noteData
+    })
+    .then(res => {
+      this.refreshNotes(token);
+      this.setState(
+        {
+          alertContext:"alert-success",
+          alertMsg: "Note successfully edited!",
+          title: "",
+          note: ""
+        }
+      );
+
+      $(`#editNoteModal${noteId}`).modal('hide');
+      $(`#editNoteForm${noteId}`).removeClass('was-validated');
+    });
   }
 
   deleteNote(noteId, event) {
