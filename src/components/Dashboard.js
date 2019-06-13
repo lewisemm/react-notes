@@ -52,23 +52,30 @@ class Dashboard extends Component {
     this.setState({note: event.target.value});
   }
 
-  refreshNotes(token) {
-    axios({
-      method: 'get',
-      headers: {
-        'Authorization': `JWT ${token}`
-      },
-      url: "http://localhost:8000/api/notes/",
-    })
-    .then(res => {
-      this.setState(
-        {
-          data: {
-            results: res.data
-          }
-        }
-      );
-    });
+  refreshNotes(res, actionType) {
+    switch (actionType) {
+      case 'CREATE_NOTE':
+        let newCard = {};
+        newCard[res.data.id] = res.data;
+
+        let createdNotecards = Object.assign(this.state.notecards, newCard);
+        this.setState({notecards: createdNotecards});
+        break;
+      case 'EDIT_NOTE':
+        let updatedCard = {};
+        updatedCard[res.data.id] = res.data;
+
+        let updatedNoteCards = Object.assign(this.state.notecards, updatedCard);
+        this.setState({notecards: updatedNoteCards});
+        break;
+      case 'DELETE_NOTE':
+        // res will be the note's id for the DELETE operation.
+        let deletedNoteCards = Object.assign(this.state.notecards, {});
+        delete deletedNoteCards[res];
+
+        this.setState({notecards: deletedNoteCards});
+        break;
+    }
   }
 
   editNote(noteId, event) {
@@ -93,7 +100,7 @@ class Dashboard extends Component {
         data: noteData
     })
     .then(res => {
-      this.refreshNotes(token);
+      this.refreshNotes(res, 'EDIT_NOTE');
       this.setState(
         {
           alertContext:"alert-success",
@@ -120,7 +127,7 @@ class Dashboard extends Component {
       method: 'delete'
     })
     .then(res => {
-      this.refreshNotes(token);
+      this.refreshNotes(noteId, 'DELETE_NOTE');
       this.setState(
         {
           alertContext:"alert-danger",
@@ -225,7 +232,7 @@ class Dashboard extends Component {
         data: noteData
     })
     .then(res => {
-      this.refreshNotes(token);
+      this.refreshNotes(res, 'CREATE_NOTE');
       this.setState(
         {
           alertContext:"alert-success",
