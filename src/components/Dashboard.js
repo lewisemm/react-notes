@@ -3,12 +3,27 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import NoteCard from './NoteCard';
-import {
-  Input, PageFooter,
-  Button, TextArea, Alert }
-  from './inputs/inputs';
+import {Input, TextArea, Alert }from './inputs/inputs';
+import {PagesFooter} from './paginator';
 
 const $ = window.$;
+
+let shiftActiveClassLeft = (currentPage) => {
+  let currentActiveButton = document.getElementById(`pageButton${currentPage}`);
+  console.log(`This is the classList in ${currentActiveButton}: ${currentActiveButton.classList}`);
+  currentActiveButton.classList.remove('active');
+
+  let newActiveButton = document.getElementById(`pageButton${currentPage-1}`);
+  newActiveButton.classList.add('active');
+}
+
+let shiftActiveClassRight = (currentPage) => {
+  let currentActiveButton = document.getElementById(`pageButton${currentPage}`);
+  currentActiveButton.classList.remove('active');
+
+  let newActiveButton = document.getElementById(`pageButton${currentPage+1}`);
+  newActiveButton.classList.add('active');
+}
 
 class Dashboard extends Component {
 
@@ -17,6 +32,7 @@ class Dashboard extends Component {
 
     this.state = {
       data: {
+        count: 0,
         results: []
       },
       authenticated: true,
@@ -162,9 +178,7 @@ class Dashboard extends Component {
     .then(res => {
       this.setState(
         {
-          data: {
-            results: res.data
-          }
+          data: res.data
         }
       );
 
@@ -185,7 +199,7 @@ class Dashboard extends Component {
     });
   }
 
-  changePage(pageNo, event) {
+  changePage(requestedPage, currentPage, event) {
     event.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -195,15 +209,32 @@ class Dashboard extends Component {
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: `http://localhost:8000/api/notes/?page=${pageNo}`,
+        url: `http://localhost:8000/api/notes/?page=${requestedPage}`,
     })
     .then(res => {
       this.setState({
-        data: {
-          results: res.data,
-        },
-        currentPage: pageNo
+        currentPage: requestedPage
       });
+
+      this.setState({data: res.data});
+
+      let notecardsState = {};
+      this.state.data.results.map((item, index) => {
+        notecardsState.id = item.id;
+        notecardsState[item.id] = item;
+      });
+
+      // notecardsState.id will still be accessible. It will have the value of the last item.id
+      // We don't want this. We should only access via notecardsState[id] where id is an int
+      delete notecardsState.id;
+
+      this.setState({notecards: notecardsState});
+
+      if (requestedPage > currentPage) {
+        shiftActiveClassRight(currentPage);
+      } else if (requestedPage < currentPage) {
+        shiftActiveClassLeft(currentPage);
+      }
     })
     .catch(err => {
       console.log(err);
@@ -322,12 +353,10 @@ class Dashboard extends Component {
             { notes }
           </div>
           <div className="row justify-content-center page-footer">
-            <PageFooter
-              previous={this.state.data.previous}
-              next={this.state.data.next}
+            <PagesFooter
               itemCount={this.state.data.count}
-              onClick={this.changePage}
               currentPage={this.state.currentPage}
+              onClick={this.changePage}
             />
           </div>
           <div className="modal fade" id="createNoteModal" tabIndex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
