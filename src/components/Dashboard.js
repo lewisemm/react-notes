@@ -8,20 +8,20 @@ import {PagesFooter} from './paginator';
 
 const $ = window.$;
 
-let shiftActiveClassLeft = (currentPage) => {
+let shiftActiveClassLeft = (currentPage, requestedPage) => {
   let currentActiveButton = document.getElementById(`pageButton${currentPage}`);
   console.log(`This is the classList in ${currentActiveButton}: ${currentActiveButton.classList}`);
   currentActiveButton.classList.remove('active');
 
-  let newActiveButton = document.getElementById(`pageButton${currentPage-1}`);
+  let newActiveButton = document.getElementById(`pageButton${requestedPage}`);
   newActiveButton.classList.add('active');
 }
 
-let shiftActiveClassRight = (currentPage) => {
+let shiftActiveClassRight = (currentPage, requestedPage) => {
   let currentActiveButton = document.getElementById(`pageButton${currentPage}`);
   currentActiveButton.classList.remove('active');
 
-  let newActiveButton = document.getElementById(`pageButton${currentPage+1}`);
+  let newActiveButton = document.getElementById(`pageButton${requestedPage}`);
   newActiveButton.classList.add('active');
 }
 
@@ -231,9 +231,9 @@ class Dashboard extends Component {
       this.setState({notecards: notecardsState});
 
       if (requestedPage > currentPage) {
-        shiftActiveClassRight(currentPage);
+        shiftActiveClassRight(currentPage, requestedPage);
       } else if (requestedPage < currentPage) {
-        shiftActiveClassLeft(currentPage);
+        shiftActiveClassLeft(currentPage, requestedPage);
       }
     })
     .catch(err => {
