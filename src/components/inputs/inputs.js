@@ -64,6 +64,7 @@ export function TextArea(props) {
           rows={props.rows}
           placeholder={props.label}
           value={props.value}
+          defaultValue={'' || props.defaultValue}
           onChange={props.onChange}
           required>
         </textarea>
@@ -79,6 +80,7 @@ export function TextArea(props) {
           rows={props.rows}
           placeholder={props.label}
           value={props.value}
+          defaultValue={'' || props.defaultValue}
           onChange={props.onChange}>
         </textarea>
       </div>
@@ -131,8 +133,15 @@ export function FormModal(props) {
                 <div id={`titleFeedbackId${props.id}`} className="invalid-feedback">Title is a required field!</div>
               </div>
               <div className="form-group">
-                <label htmlFor="editNoteDescription">Description</label>
-                <input type="text" className="form-control" id={`editNoteDescription${props.id}`} placeholder="Description" defaultValue={props.note} onChange={props.noteOnChange} required/>
+                <TextArea
+                  id={`editNoteDescription${props.id}`}
+                  label="Description"
+                  rows="7"
+                  defaultValue={props.note}
+                  onChange={props.noteOnChange}
+                  feedback="Description is a required field!"
+                  required
+                />
                 <div id={`noteFeedbackId${props.id}`} className="invalid-feedback">Description is a required field!</div>
               </div>
             </div>
