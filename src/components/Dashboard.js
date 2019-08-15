@@ -70,13 +70,6 @@ class Dashboard extends Component {
 
   refreshNotes(res, actionType) {
     switch (actionType) {
-      case 'EDIT_NOTE':
-        let updatedCard = {};
-        updatedCard[res.data.id] = res.data;
-
-        let updatedNoteCards = Object.assign(this.state.notecards, updatedCard);
-        this.setState({notecards: updatedNoteCards});
-        break;
       case 'DELETE_NOTE':
         // res will be the note's id for the DELETE operation.
         let deletedNoteCards = Object.assign(this.state.notecards, {});
@@ -109,15 +102,23 @@ class Dashboard extends Component {
         data: noteData
     })
     .then(res => {
-      this.refreshNotes(res, 'EDIT_NOTE');
-      this.setState(
-        {
+      let {title, note} =  res.data
+      let updatedCard = {}
+      updatedCard[res.data.id] = {title, note}
+
+      let notecardsCopy = Object.assign(this.state.notecards, updatedCard)
+
+      // Note To Future Self: I'm aware that I'm not updating this.state.data.results.
+      // Will explore how to implement a single source of truth to eradicate this convolution.
+      this.setState((state) => {
+        return {
+          notecards: notecardsCopy,
           alertContext:"alert-success",
           alertMsg: "Note successfully edited!",
           title: "",
           note: ""
         }
-      );
+      });
 
       $(`#editNoteModal${noteId}`).modal('hide');
       $(`#editNoteForm${noteId}`).removeClass('was-validated');
