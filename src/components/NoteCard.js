@@ -26,7 +26,7 @@ let noteShortener = (propNote) => {
   return note;
 }
 
-export default function NameCard(props) {
+export default function NoteCard(props) {
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-12 note-margin">
