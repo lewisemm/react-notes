@@ -70,13 +70,6 @@ class Dashboard extends Component {
 
   refreshNotes(res, actionType) {
     switch (actionType) {
-      case 'CREATE_NOTE':
-        let newCard = {};
-        newCard[res.data.id] = res.data;
-
-        let createdNotecards = Object.assign(this.state.notecards, newCard);
-        this.setState({notecards: createdNotecards});
-        break;
       case 'EDIT_NOTE':
         let updatedCard = {};
         updatedCard[res.data.id] = res.data;
@@ -176,11 +169,14 @@ class Dashboard extends Component {
       url: "http://localhost:8000/api/notes/",
     })
     .then(res => {
-      this.setState(
-        {
-          data: res.data
+      this.setState((state) => {
+        return {
+          data: {
+            count: res.data.count || this.state.data.count,
+            results: res.data.results || this.state.data.results,
+          }
         }
-      );
+      });
 
       let notecardsState = {};
       this.state.data.results.map((item, index) => {
@@ -263,15 +259,25 @@ class Dashboard extends Component {
         data: noteData
     })
     .then(res => {
-      this.refreshNotes(res, 'CREATE_NOTE');
-      this.setState(
-        {
-          alertContext:"alert-success",
+      let {title, note} = res.data
+      let notecardsCopy = Object.assign({}, this.state.notecards)
+      notecardsCopy[res.data.id] = {title, note}
+
+      let dataCopy = Object.assign({}, this.state.data)
+      dataCopy.count += 1
+      dataCopy.results.push({title: res.title, note: res.note})
+
+      this.setState((state) => {
+        return {
+          notecards: notecardsCopy,
+          data: dataCopy,
+          alertContext: "alert-success",
           alertMsg: "Note successfully created!",
           title: "",
           note: ""
         }
-      );
+      });
+
       $('#createNoteModal').modal('hide');
       $('#createNoteForm').removeClass('was-validated');
 
