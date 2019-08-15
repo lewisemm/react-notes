@@ -51,7 +51,6 @@ class Dashboard extends Component {
     this.handleSearchText = this.handleSearchText.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
     this.handleNote = this.handleNote.bind(this);
-    this.refreshNotes = this.refreshNotes.bind(this);
     this.createNote = this.createNote.bind(this);
     this.editNote = this.editNote.bind(this);
   }
@@ -66,18 +65,6 @@ class Dashboard extends Component {
 
   handleNote(event) {
     this.setState({note: event.target.value});
-  }
-
-  refreshNotes(res, actionType) {
-    switch (actionType) {
-      case 'DELETE_NOTE':
-        // res will be the note's id for the DELETE operation.
-        let deletedNoteCards = Object.assign(this.state.notecards, {});
-        delete deletedNoteCards[res];
-
-        this.setState({notecards: deletedNoteCards});
-        break;
-    }
   }
 
   editNote(noteId, event) {
@@ -137,13 +124,16 @@ class Dashboard extends Component {
       method: 'delete'
     })
     .then(res => {
-      this.refreshNotes(noteId, 'DELETE_NOTE');
-      this.setState(
-        {
+      let notecardsCopy = Object.assign(this.state.notecards, {});
+      delete notecardsCopy[noteId];
+
+      this.setState((state) => {
+        return {
+          notecards: notecardsCopy,
           alertContext:"alert-danger",
           alertMsg: "Note successfully deleted!"
         }
-      );
+      });
     })
     .catch(error => {
       console.log("Could not delete notes");
