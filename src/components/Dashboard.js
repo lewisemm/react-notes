@@ -31,10 +31,6 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      data: {
-        count: 0,
-        results: []
-      },
       authenticated: true,
       currentPage: 1,
       searchText: "",
@@ -256,7 +252,7 @@ class Dashboard extends Component {
 
       let dataCopy = Object.assign({}, this.state.data)
       dataCopy.count += 1
-      dataCopy.results.push({title: res.title, note: res.note})
+      dataCopy.results.push({title: res.data.title, note: res.data.note})
 
       this.setState((state) => {
         return {
