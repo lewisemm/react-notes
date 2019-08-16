@@ -49,6 +49,7 @@ class Dashboard extends Component {
     this.handleNote = this.handleNote.bind(this);
     this.createNote = this.createNote.bind(this);
     this.editNote = this.editNote.bind(this);
+    this.initFormModal = this.initFormModal.bind(this);
   }
 
   handleSearchText(event) {
@@ -61,6 +62,13 @@ class Dashboard extends Component {
 
   handleNote(event) {
     this.setState({note: event.target.value});
+  }
+
+  initFormModal(titleValue, noteValue, event) {
+    this.setState({
+      title: titleValue,
+      note: noteValue
+    })
   }
 
   editNote(noteId, event) {
@@ -91,8 +99,6 @@ class Dashboard extends Component {
 
       let notecardsCopy = Object.assign(this.state.notecards, updatedCard)
 
-      // Note To Future Self: I'm aware that I'm not updating this.state.data.results.
-      // Will explore how to implement a single source of truth to eradicate this convolution.
       this.setState((state) => {
         return {
           notecards: notecardsCopy,
@@ -147,7 +153,6 @@ class Dashboard extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-
     axios({
       method: 'get',
       headers: {
@@ -156,17 +161,10 @@ class Dashboard extends Component {
       url: "http://localhost:8000/api/notes/",
     })
     .then(res => {
-      this.setState((state) => {
-        return {
-          data: {
-            count: res.data.count || this.state.data.count,
-            results: res.data.results || this.state.data.results,
-          }
-        }
-      });
+      let results = res.data.results;
 
       let notecardsState = {};
-      this.state.data.results.map((item, index) => {
+      results.map((item, index) => {
         notecardsState.id = item.id;
         notecardsState[item.id] = item;
       });
@@ -250,14 +248,9 @@ class Dashboard extends Component {
       let notecardsCopy = Object.assign({}, this.state.notecards)
       notecardsCopy[res.data.id] = {title, note}
 
-      let dataCopy = Object.assign({}, this.state.data)
-      dataCopy.count += 1
-      dataCopy.results.push({title: res.data.title, note: res.data.note})
-
       this.setState((state) => {
         return {
           notecards: notecardsCopy,
-          data: dataCopy,
           alertContext: "alert-success",
           alertMsg: "Note successfully created!",
           title: "",
@@ -277,7 +270,7 @@ class Dashboard extends Component {
 
       let notes;
 
-      if (typeof(this.state.data.results) === 'undefined' || this.state.data.results.length === 0) {
+      if (Object.entries(this.state.notecards) == 0) {
         notes = (
           <div className="col-12">
             <Alert alertContext="alert-warning" message="You have not created any notes so far."/>
@@ -300,6 +293,7 @@ class Dashboard extends Component {
               noteOnChange={(e) => {this.handleNote(e)}}
               onClick={this.deleteNote}
               onSubmit={this.editNote}
+              initFormModal={this.initFormModal}
             />
           );
         });
@@ -346,11 +340,7 @@ class Dashboard extends Component {
             { notes }
           </div>
           <div className="row justify-content-center page-footer">
-            <PagesFooter
-              itemCount={this.state.data.count}
-              currentPage={this.state.currentPage}
-              onClick={this.changePage}
-            />
+            {/* redesign the footer. Previous thought process hit a dead end. */}
           </div>
           <div className="modal fade" id="createNoteModal" tabIndex="-1" role="dialog" aria-labelledby="createNoteLabel" aria-hidden="true">
             <div className="modal-dialog" role="document">

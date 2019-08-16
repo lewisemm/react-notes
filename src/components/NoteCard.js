@@ -37,7 +37,7 @@ export default function NoteCard(props) {
         <div className="card-body">
           <p className="card-text">{ noteShortener(props.note) }</p>
 
-          <a href={`#editNoteModal${props.id}`} data-toggle="modal" className="card-link">Edit Note</a>
+          <a href={`#editNoteModal${props.id}`} data-toggle="modal" className="card-link" onClick={props.initFormModal.bind(this, props.title, props.note)}>Edit Note</a>
 
           <a href={`#modalId${props.id}`} data-toggle="modal" className="card-link">Delete Note</a>
         </div>
