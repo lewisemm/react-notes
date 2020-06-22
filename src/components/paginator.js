@@ -48,14 +48,14 @@ export class PagesFooter extends Component {
         <PageButton
           index={index + 1}
           key={index + 1}
-          active={this.props.currentPage == (index+1) ? 'active': ''}
+          active={this.props.currentPage === (index+1) ? 'active': ''}
           onClick={this.props.onClick}
           currentPage={index + 1}
         />
       );
     });
 
-    if (this.props.currentPage == 1) {
+    if (this.props.currentPage === 1) {
       previousButton = <Button disabled='disabled' buttonText='Previous'/>
       nextButton = (
         <Button
@@ -65,7 +65,7 @@ export class PagesFooter extends Component {
           actionType='next'
         />
       );
-    } else if (this.props.currentPage == totalPages) {
+    } else if (this.props.currentPage === totalPages) {
       previousButton = (
         <Button
           buttonText='Previous'

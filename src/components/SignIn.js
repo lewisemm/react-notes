@@ -34,7 +34,7 @@ class SignIn extends Component {
   componentDidMount() {
     const token = localStorage.getItem("token");
 
-    if (typeof(this.props.location.state) != "undefined") {
+    if (typeof(this.props.location.state) !== "undefined") {
       this.setState({
         alertContext: this.props.location.state.alertContext,
         alertMsg: this.props.location.state.alertMsg,
@@ -77,6 +77,7 @@ class SignIn extends Component {
     }).catch(error => {
       this.setState({authenticated: false });
       console.log("Error message here");
+      console.log('error', error);
     });
   }
 

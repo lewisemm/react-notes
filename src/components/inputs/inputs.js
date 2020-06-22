@@ -176,21 +176,21 @@ export function PageFooter(props) {
 
   const previousButton = (
     props.currentPage === 1 ?
-    <li className="page-item disabled"><a className="page-link" href="#">Previous</a></li> :
+    <li className="page-item disabled"><a className="page-link">Previous</a></li> :
     <li
       className="page-item"
       onClick={props.onClick.bind(this, props.currentPage - 1)}>
-      <a className="page-link" href="#">Previous</a>
+      <a className="page-link">Previous</a>
     </li>
   );
 
   const nextButton = (
     props.currentPage === pageCount ?
-    <li className="page-item disabled"><a className="page-link" href="#">Next</a></li> :
+    <li className="page-item disabled"><a className="page-link">Next</a></li> :
     <li
       className="page-item"
       onClick={props.onClick.bind(this, props.currentPage + 1)}>
-      <a className="page-link" href="#">Next</a>
+      <a className="page-link">Next</a>
     </li>
   );
 
@@ -201,14 +201,14 @@ export function PageFooter(props) {
               key={index + 1}
               className="page-item active"
               onClick={props.onClick.bind(this, index + 1)}>
-              <a className="page-link" href="#">{ index + 1 }</a>
+              <a className="page-link">{ index + 1 }</a>
             </li>;
     }
     return <li
             key={index + 1}
             className="page-item"
             onClick={props.onClick.bind(this, index + 1)}>
-            <a className="page-link" href="#">{ index + 1 }</a>
+            <a className="page-link">{ index + 1 }</a>
           </li>;
   });
 

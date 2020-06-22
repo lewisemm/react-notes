@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
@@ -141,7 +141,7 @@ class Profile extends Component {
               <div className="tab-content" id="pills-tabContent">
                 <div className="tab-pane fade show active" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
                   <div className="card h-100">
-                    <img id="profile-photo" className="card-img-top" src={photo} alt="Profile Photo"/>
+                    <img id="profile-photo" className="card-img-top" src={photo} alt={`Avatar of ${this.state.username}`}/>
                     <div className="card-body">
                       <h6 className="card-title text-center">{this.state.username}</h6>
                       <form className="w-75">
@@ -162,7 +162,7 @@ class Profile extends Component {
                     <div className="card-body">
                       <h5 className="card-title">Delete User</h5>
                       <p className="card-text"><strong>Warning: You cannot undo this operation!</strong></p>
-                      <p className="text-center"><a class="btn btn-danger" href="#" role="button" onClick={this.deleteUser}>Delete User</a></p>
+                      <p className="text-center"><a class="btn btn-danger" role="button" onClick={this.deleteUser}>Delete User</a></p>
                     </div>
                   </div>
                 </div>

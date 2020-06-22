@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import NoteCard from './NoteCard';
 import {Input, TextArea, Alert }from './inputs/inputs';
-import {PagesFooter} from './paginator';
 
 const $ = window.$;
 
@@ -74,7 +73,7 @@ class Dashboard extends Component {
   editNote(noteId, event) {
     event.preventDefault();
     
-    if ((this.state.title.length == 0) || (this.state.note.length == 0))
+    if ((this.state.title.length === 0) || (this.state.note.length === 0))
       return;
 
     const noteData = {
@@ -164,9 +163,10 @@ class Dashboard extends Component {
       let results = res.data.results;
 
       let notecardsState = {};
-      results.map((item, index) => {
+      results.map((item) => {
         notecardsState.id = item.id;
         notecardsState[item.id] = item;
+        return null;
       });
 
       // notecardsState.id will still be accessible. It will have the value of the last item.id
@@ -200,9 +200,10 @@ class Dashboard extends Component {
       this.setState({data: res.data});
 
       let notecardsState = {};
-      this.state.data.results.map((item, index) => {
+      this.state.data.results.map((item) => {
         notecardsState.id = item.id;
         notecardsState[item.id] = item;
+        return null;
       });
 
       // notecardsState.id will still be accessible. It will have the value of the last item.id
@@ -225,7 +226,7 @@ class Dashboard extends Component {
   createNote(event) {
     event.preventDefault();
 
-    if ((this.state.title.length == 0) || (this.state.note.length == 0))
+    if ((this.state.title.length === 0) || (this.state.note.length === 0))
       return;
 
     const noteData = {
@@ -270,7 +271,7 @@ class Dashboard extends Component {
 
       let notes;
 
-      if (Object.entries(this.state.notecards) == 0) {
+      if (Object.entries(this.state.notecards) === 0) {
         notes = (
           <div className="col-12">
             <Alert alertContext="alert-warning" message="You have not created any notes so far."/>
@@ -306,7 +307,7 @@ class Dashboard extends Component {
             <div className="col">
               <ul className="nav justify-content-end ">
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                  <a className="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                   <div className="dropdown-menu">
                     <Link to="/profile" className="dropdown-item">Profile</Link>
                     <div className="dropdown-divider"></div>

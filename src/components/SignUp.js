@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
-import { Alert } from './alerts/alerts';
 
 class SignUp extends Component {
 
