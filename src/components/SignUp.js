@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
+import { baseUrl } from './utils'
 
 class SignUp extends Component {
 
@@ -32,7 +33,6 @@ class SignUp extends Component {
 
   createUser(event) {
     event.preventDefault();
-    const url = 'http://localhost:8000/api';
 
     let password2 = document.getElementById('password2').value;
 
@@ -42,11 +42,11 @@ class SignUp extends Component {
     }
 
     if (this.state.password === password2) {
-      axios.post(`${url}/users/`, data)
+      axios.post(`${baseUrl}/users/`, data)
         .then((res) => {
           // use newly created credentials to fetch token and store
            // it in localStorage
-          axios.post(`${url}/api-token-auth/`, data)
+          axios.post(`${baseUrl}/api-token-auth/`, data)
             .then((res) => {
               localStorage.setItem('token', res.data.token);
               this.setState({authenticated: true });
@@ -98,7 +98,7 @@ class SignUp extends Component {
 
       <div className="container h-100">
         <div className="row h-100 align-items-center justify-content-center">
-          <form className="w-100">
+          <form className="w-100" onSubmit={this.createUser}>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="form-group col-4">
@@ -117,7 +117,7 @@ class SignUp extends Component {
               </div>
               <div className="row justify-content-center">
                 <div className="form-group col-4">
-                  <Button label="Create Account" onClick={this.createUser} classes="btn btn-primary w-100" type="submit"/>
+                  <Button label="Create Account" classes="btn btn-primary w-100" type="submit"/>
                 </div>
               </div>
               <div className="row justify-content-center">
