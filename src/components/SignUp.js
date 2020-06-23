@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
-import { baseUrl } from './utils'
+import { baseUrl } from './utils';
 
 class SignUp extends Component {
 
@@ -71,7 +71,7 @@ class SignUp extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:8000/api/api-token-verify/",
+      url: `${baseUrl}/api-token-verify/`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": `JWT ${token}`

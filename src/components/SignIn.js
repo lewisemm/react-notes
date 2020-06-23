@@ -3,6 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button, Alert } from './inputs/inputs';
+import { baseUrl } from './utils';
 
 class SignIn extends Component {
 
@@ -43,7 +44,7 @@ class SignIn extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:8000/api/api-token-verify/",
+      url: `${baseUrl}/api-token-verify/`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": `JWT ${token}`
@@ -65,7 +66,7 @@ class SignIn extends Component {
 
     axios({
       method: "post",
-      url: "http://localhost:8000/api/api-token-auth/",
+      url: `${baseUrl}/api-token-auth/`,
       data: {
         'username': this.state.username,
         'password': this.state.password,

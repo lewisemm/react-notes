@@ -3,6 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Input, Button } from './inputs/inputs';
+import { baseUrl } from './utils';
 
 class Profile extends Component {
 
@@ -35,7 +36,7 @@ class Profile extends Component {
     
     axios({
       method: 'get',
-      url: "http://localhost:8000/api/me/",
+      url: `${baseUrl}/me/`,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `JWT ${token}`
@@ -64,7 +65,6 @@ class Profile extends Component {
     const token = localStorage.getItem('token');
     const user_id = localStorage.getItem('user_id');
     const { newPassword, confirmNewPassword } = this.state;
-    const url = "http://localhost:8000/api/users";
     
 
     if (newPassword === confirmNewPassword) {
@@ -77,7 +77,7 @@ class Profile extends Component {
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: `${url}/${user_id}/`
+        url: `${baseUrl}/${user_id}/`
       })
       .then(res => {
         console.log("password updated");
@@ -93,11 +93,10 @@ class Profile extends Component {
 
     const token = localStorage.getItem('token');
     const user_id = localStorage.getItem('user_id');
-    const url = "http://localhost:8000/api/users";
 
     axios({
       method: "delete",
-      url: `${url}/${user_id}/`,
+      url: `${baseUrl}/${user_id}/`,
       headers: {
         Authorization: `JWT ${token}`
       }

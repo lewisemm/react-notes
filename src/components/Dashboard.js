@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import NoteCard from './NoteCard';
 import {Input, TextArea, Alert }from './inputs/inputs';
+import { baseUrl } from './utils';
 
 const $ = window.$;
 
@@ -84,7 +85,7 @@ class Dashboard extends Component {
 
     axios({
         method: 'put',
-        url: `http://localhost:8000/api/notes/${noteId}/`,
+        url: `${baseUrl}/notes/${noteId}/`,
         headers: {
           "Content-Type": "application/json",
           'Authorization': `JWT ${token}`
@@ -118,7 +119,7 @@ class Dashboard extends Component {
     const token = localStorage.getItem("token");
 
     axios({
-      url: `http://localhost:8000/api/notes/${noteId}/`,
+      url: `${baseUrl}/notes/${noteId}/`,
       headers: {
         Authorization: `JWT ${token}`
       },
@@ -157,10 +158,10 @@ class Dashboard extends Component {
       headers: {
         'Authorization': `JWT ${token}`
       },
-      url: "http://localhost:8000/api/notes/",
+      url: `${baseUrl}/notes/`,
     })
     .then(res => {
-      let results = res.data.results;
+      let results = (res.data && res.data.results) ? res.data.results : [];
 
       let notecardsState = {};
       results.map((item) => {
@@ -190,7 +191,7 @@ class Dashboard extends Component {
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: `http://localhost:8000/api/notes/?page=${requestedPage}`,
+        url: `${baseUrl}/notes/?page=${requestedPage}`,
     })
     .then(res => {
       this.setState({
@@ -237,7 +238,7 @@ class Dashboard extends Component {
 
     axios({
         method: 'post',
-        url: "http://localhost:8000/api/notes/",
+        url: `${baseUrl}/notes/`,
         headers: {
           "Content-Type": "application/json",
           'Authorization': `JWT ${token}`

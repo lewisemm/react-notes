@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { Input, Button, TextArea } from './inputs/inputs';
+import { baseUrl } from './utils';
 
 class NoteDetails extends Component {
 
@@ -32,7 +33,7 @@ class NoteDetails extends Component {
     const note_id = this.props.match.params.number;
 
     axios({
-      url: `http://localhost:8000/api/notes/${note_id}/`,
+      url: `${baseUrl}/notes/${note_id}/`,
       headers: {
         'Authorization': `JWT ${token}`
       },
@@ -64,7 +65,7 @@ class NoteDetails extends Component {
         headers: {
           'Authorization': `JWT ${token}`
         },
-        url: `http://localhost:8000/api/notes/${this.state.id}/`
+        url: `${baseUrl}/notes/${this.state.id}/`
       })
       .then(res => {
         console.log("note edited");
