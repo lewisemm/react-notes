@@ -33,32 +33,12 @@ class SignIn extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem("token");
-
     if (typeof(this.props.location.state) !== "undefined") {
       this.setState({
         alertContext: this.props.location.state.alertContext,
         alertMsg: this.props.location.state.alertMsg,
       });
     }
-
-    axios({
-      method: "post",
-      url: `${baseUrl}/api-token-verify/`,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `JWT ${token}`
-      },
-      data: {
-        token: token
-      }
-    })
-    .then(res => {
-      this.setState({authenticated: true });
-    })
-    .catch(error => {
-      this.setState({authenticated: false });
-    });
   }
   
   signInUser(event) {
